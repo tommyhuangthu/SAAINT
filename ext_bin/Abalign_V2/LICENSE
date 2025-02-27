@@ -1,0 +1,64 @@
+PLEASE READ THE FOLLOWING LICENSE AGREEMENT. BY USING THE PROGRAM YOU ARE
+ACKNOWLEDGING THE FACT THAT YOU AGREE TO THE TERMS OUTLINED IN THIS
+AGREEMENT. USERS WISHING TO USE THE SOFTWARE FOR COMMERCIAL ACTIVITIES
+NOT COVERED BY THIS AGREEMENT SHOULD SEND E-MAIL TO: cy_scu@yeah.net
+
+
+
+Abalign: Tool for Antibody/BCR Numbering, CDR Delimiting, MSA, VJ gene assignment
+--------------------------------------------------------------------------------
+
+                     GENERAL LICENCE 
+                    ----------------
+
+
+
+In regard to the BCR and antibody Numbering, MSA, VJ gene assignment program (Abalign)
+herewith (the Software) supplied to You (the licensee), the copyright
+and other intellectual property rights to which belong to the Licensor, 
+You undertake to the Licensor to be bound by the following terms and conditions:
+
+1. You will receive the Software and any related documentation in
+confidence and will not use the same except for the purpose of your own 
+research. The Software will be used only by such of Your officers or
+employees to whom it must reasonably be communicated to enable them to
+undertake their research and who agree to be bound by the same confidence.
+You shall procure and enforce such agreement from Your staff for
+the benefit of the Licensor.
+
+2. The publication of research using the Software must include an
+appropriate citation to the method:
+F Zong, C Long, W Hu, S Chen, W Dai, ZX Xiao, Y Cao*. Abalign: a comprehensive 
+multiple sequence alignment platform for B-cell receptor immune repertoires. 
+Nucleic Acids Research. 2023. 
+
+3. All forms of the Software will be kept in a reasonably secure place to
+prevent unauthorised access.
+
+4. The Software may not be sold as a standalone package, or incorporated into
+a commercial software package or commercial Web service or other fee-paying
+access mechanism. The Software may be used freely for individual academic
+or commercial research, for training and for teaching purposes.
+
+5. The results produced by the Software may not be incorporated into any
+data banks or databases which are subject to the payment of access or
+license fees.
+
+6. The confidentiality obligation in paragraph one shall not apply:
+
+   (i) to information and data known to the User at the time of
+	receipt hereunder (as evidenced by its written records);
+
+  (ii) to information and data which was at the time of receipt in the 
+	public domain or thereafter becomes so through no wrongful act of
+	the User;
+
+ (iii) to information and data which the User receives from a third
+	party not in breach of any obligation of confidentiality owed to
+	the Author(s).
+
+7. You understand that the Software is supplied "as is". No warranty
+as to its fitness or suitability for any purpose whatsoever is made or
+implied. In no event shall the Author(s) or Licensor be held
+responsible for any direct or indirect damages arising through the use
+of the Software.
