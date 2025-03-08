@@ -24,10 +24,28 @@ This package provides the source code for SAAINT-parser and SAAINT-DB.
    from ```https://www.rcsb.org/fasta/entry/5zxv```, where 5zxv is a valid PDB entry.
 
 1. Run and test SAAINT-parser
+   ```bash
+    python3 ./scripts/run_saaint_parser.py 5zxv
+    ```
+   or:
+   ```bash
+    python3 ./scripts/run_saaint_parser.py -v 5zxv
+    ```
+   This command will print out the calculation details, which can help debugging.
 
 1. Run SAAINT-parser to process all mmCIF files
+   ```bash
+    python3 ./scripts/run_submit_saaint_parser_jobs.py -path <mmCIF_path> <work_dir> <n_cpus>
+    ```
+   or:
+   ```bash
+    python3 ./scripts/run_submit_saaint_parser_jobs.py -list <mmCIF_list> <work_dir> <n_cpus>
+    ```
 
 1. Build SAAINT-DB
+   ```bash
+    python3 ./scripts/run_saaintdb_builder.py
+    ```
 
 ## Analyzing SAAINT-DB
 1. Analyze SAAINT-DB
