@@ -20,7 +20,7 @@ This package provides the source code for SAAINT-parser and SAAINT-DB.
 
 1. Download mmCIF-associated FASTA files
 
-1. Run/Test SAAINT-parser on a single PDB entry
+1. Run and test SAAINT-parser
 
 1. Run SAAINT-parser to process all mmCIF files
 
