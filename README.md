@@ -8,7 +8,8 @@ This package provides the source code for SAAINT-parser and SAAINT-DB.
     ```
 1. Rsync mmCIF files from the Protein Data Bank (PDB) and download mmCIF-associated FASTA files
    
-   * Users can choose to rsync mmCIF files from RCSB PDB, PDBe, or PDBj by running one of the following commands:
+* Users can choose to rsync mmCIF files from RCSB PDB, PDBe, or PDBj by running one of the following commands:
+
    ```bash
     rsync -rlpt -v -z --delete --port=33444 rsync.rcsb.org::ftp_data/structures/divided/mmCIF/ ./mmCIF
     ```
