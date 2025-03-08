@@ -29,5 +29,5 @@ This package provides the source code for SAAINT-parser and SAAINT-DB.
 ## Analyzing SAAINT-DB
 1. Analyze SAAINT-DB
    ```bash
-    python scripts/run_saaint_analyzer.py saaintdb_2025012908_all.xlsx -j <task_name>
+    python3 scripts/run_saaint_analyzer.py saaintdb_2025012908_all.xlsx -j <task_name>
     ```
