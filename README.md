@@ -1,11 +1,13 @@
 # SAAINT
-This package provides the source code for SAAINT-parser and SAAINT-DB.
+This package provides the source code for SAAINT-parser, building and analyzing SAAINT-DB.
 
 ## Installation and running SAAINT-parser
 1. Clone this repository
    ```bash
-    git clone https://github.com/tommyhuangthu/SAAINT.git
-    ```
+   git clone https://github.com/tommyhuangthu/SAAINT.git
+   cd SAAINT/
+   mkdir -p database/mmCIF database/fastas database/saaint
+   ```
 1. Rsync mmCIF files from the Protein Data Bank (PDB) and download mmCIF-associated FASTA files
    * rsync PDB mmCIF files
    ```bash
