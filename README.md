@@ -21,7 +21,7 @@ SAAINT stands for <u>S</u>tructural <u>A</u>ntibody and <u>A</u>ntibody-antigen 
    ./scripts/sbatch_rsync_mmcifs.sh
    ```
    The SLURM script ```scripts/sbatch_rsync_mmcifs.sh``` will call ```scripts/run_rsync_mmcifs.py``` to download mmCIF files from the PDBe.
-   The downloaded mmCIF files are saved into the database/mmCIF_divided directory, and specifically, a set of folders named with the two middle letters of PDB entries.
+   The downloaded mmCIF files are saved into the database/mmCIF_divided directory, and specifically, a set of folders named with the two middle letters of PDB entries. For example, for PDB entry ```5zxv```, the script can automatically rsync its mmCIF file, saving into ```database/mmCIF_divided/zx/5zxv.cif.gz```.
    Users can also modify ```scripts/run_rsync_mmcifs.py``` to download mmCIFs from RCSB PDB, PDBe, or PDBj (see the instructions at
    https://www.wwpdb.org/ftp/pdb-ftp-sites), depending on their locations.
 
@@ -30,19 +30,19 @@ SAAINT stands for <u>S</u>tructural <u>A</u>ntibody and <u>A</u>ntibody-antigen 
    ./scripts/sbatch_update_fastas.sh
    ```
    The SLURM script ```scripts/sbatch_update_fastas.sh``` will call ```scripts/run_update_fastas.py``` to download or update FASTA files
-   from the RCSB PDB website. For example, for PDB entry ```5zxv```, the script can automatically retrieve its FASTA content from ```[https://www.rcsb.org/fasta/entry/5zxv](https://www.rcsb.org/fasta/entry/5ZXV/display)```
+   from the RCSB PDB website. The downloaded FASTA files are saved into the database/fasta_divided directory, and specifically, a set of folders named with the two middle letters of PDB entries. For example, for PDB entry ```5zxv```, the script can automatically retrieve its FASTA content from ```https://www.rcsb.org/fasta/entry/5zxv/display```
    and save it into ```database/fasta_divided/zx/5zxv.fasta```.
 
 1. Run and test SAAINT-parser
-   For example, to extract the antibodies and antibo
+   Users can simply run SAAINT-parser with a PDB entry as the only input, e.g.:
    ```bash
    python3 ./scripts/run_saaint_parser.py 5zxv
    ```
-   or:
+   or run SAAINT-parser with options --verbose (or -v) to print out the program deails (for debugging):
    ```bash
    python3 ./scripts/run_saaint_parser.py -v 5zxv
    ```
-   This command will print out the calculation details, which can help debugging.
+   Successfully identified antibodies and antibody-antigen interactions will be saved into a folder named ```zx``` (the two middle letters of ```5zxv```): ```5zxv_aai_all.tsv``` records all identified antibodies or AAIs, ```5zxv_aai_rep.tsv``` records representative antibodies or AAIs (see Reference for details), and ```5zxv_paired_ab_ag_ids.tsv``` records paired antibody-antigen chain IDs.
 
 1. Run SAAINT-parser to process all mmCIF files
    ```bash
