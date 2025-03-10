@@ -1,5 +1,5 @@
 # SAAINT
-SAAINT stands for <u>S</u>tructural <u>A</u>ntibody and <u>A</u>ntibody-antigen <u>INT</u>eraction. This package provides the source code for implementing SAAINT-parser, and building, analyzing, and updating the resulting SAAINT database, SAAINT-DB.
+SAAINT stands for _S_tructural <u>A</u>ntibody and <u>A</u>ntibody-antigen <u>INT</u>eraction. This package provides the source code for implementing SAAINT-parser, and building, analyzing, and updating the resulting SAAINT database, SAAINT-DB.
 
 ## Installation and running SAAINT-parser
 1. Configure the environment
