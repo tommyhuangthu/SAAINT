@@ -1,5 +1,5 @@
-# SAAINT
-SAAINT stands for Structural Antibody and Antibody-antigen INTeraction. This package provides the source code for SAAINT-parser, building and analyzing SAAINT-DB.
+# SAAINT （<u>S</u>tructural <u>A</u>ntibody and <u>A</u>ntibody-antigen <u>INT</u>eraction）
+This package provides the source code for SAAINT-parser, building and analyzing SAAINT-DB.
 
 ## Installation and running SAAINT-parser
 1. Clone this repository
