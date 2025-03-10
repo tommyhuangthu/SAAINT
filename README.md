@@ -80,6 +80,6 @@ This package provides:
     python3 scripts/run_saaint_analyzer.py saaintdb_2025012908_all.xlsx -j <task_name>
     ```
 ## Reference
-
+[Xiaoqiang Huang, Jun Zhou, Shuang Chen, Xiaofeng Xia, Y Eugene Chen, Jie Xu. Fast, accurate parsing of antibody structures and antibody-antigen interactions enables a comprehensive structural antibody database. bioRxiv. doi: https://doi.org/10.1101/2025.02.25.640196](https://www.biorxiv.org/content/10.1101/2025.02.25.640196v1.full)
 ## Contact
 Xiaoqiang Huang: xiaoqiah@umich.edu
