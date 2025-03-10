@@ -7,7 +7,7 @@ This package provides:
 ## Installation and running SAAINT-parser
 1. Configure the environment
    ```bash
-   conda create -n saaint python=3.10 biopython=1.84 \numpy=1.26.3 matplotlib=3.10.0 seaborn=0.13.2 urllib3=2.2.1 pandas=2.2.3
+   conda create -n saaint python=3.10 biopython=1.84 numpy=1.26.3 matplotlib=3.10.0 seaborn=0.13.2 urllib3=2.2.1 pandas=2.2.3
    conda activate saaint
    ```
    
@@ -34,7 +34,7 @@ This package provides:
    ./scripts/sbatch_update_fastas.sh
    ```
    The SLURM script ```scripts/sbatch_update_fastas.sh``` will call ```scripts/run_update_fastas.py``` to download or update FASTA files from the RCSB PDB website.
-   ```scripts/run_update_fastas.py``` parses the output of the SLURM job ```scripts/sbatch_rsync_mmcifs.sh``` to identify the PDB entries that need to be updated or are obsolete, generating two lists of mmCIF files, ```database/list_update_cifs.txt``` and ```database/list_obsolete_cifs.txt```.
+   ```scripts/run_update_fastas.py``` parses the output of the SLURM job ```scripts/sbatch_rsync_mmcifs.sh``` to identify the PDB entries that need to be updated or are obsolete, generating two mmCIF list files, ```database/list_update_cifs.txt``` and ```database/list_obsolete_cifs.txt```.
    The downloaded FASTA files are saved into the ```database/fasta_divided``` directory, and specifically, a set of folders named with the two middle letters of PDB entries.
    For example, for PDB entry ```5zxv```, the script can automatically retrieve its FASTA content from https://www.rcsb.org/fasta/entry/5zxv/display
    and save it into ```database/fasta_divided/zx/5zxv.fasta```.
