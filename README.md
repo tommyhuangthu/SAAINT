@@ -1,10 +1,12 @@
 # SAAINT
+
 SAAINT stands for <i>S</i>tructures of <i>A</i>ntibodies and antibody-<i>A</i>ntigen <i>INT</i>eractions. 
 This package provides: 
 * an implementation of the ```SAAINT-parser``` workflow designed for fast and accurate extraction and annoatation of structures of antibodies (Abs) and antibody-antigen interactions (AAIs) from the Protein Data Bank (PDB), yielding a comprehensive and up-to-date structural antibody database, ```SAAINT-DB```.
 * source code for building, analyzing, and updating ```SAAINT-DB```.
 
 ## Installation and running SAAINT-parser
+
 1. Configure the environment
    ```bash
    conda create -n saaint python=3.10 biopython=1.84 numpy=1.26.3 matplotlib=3.10.0 seaborn=0.13.2 urllib3=2.2.1 pandas=2.2.3
@@ -80,6 +82,7 @@ This package provides:
   The representative dataset is saved as ```saaintdb_{timestamp}_rep.xlsx``` and ```saaintdb_{timestamp}_rep.tsv```. Here, <timestamp> (e.g., 2025012908) represents the date and time of the database build.
 
 ## Analyzing SAAINT-DB
+
 1. Analyze SAAINT-DB
    To make statistical analyses of the SAAINT-DB data entries, run:
    ```bash
@@ -109,8 +112,12 @@ This package provides:
    ```num_pdbs_with_paired_vhvl```:\
    ```num_pdbs_with_ag```:\
    ```affinity```:\
-   ```num_pdbs_with_affinity```:\
+   ```num_pdbs_with_affinity```:
+   
 ## Reference
+
 [Huang X, Zhou J, Chen S, Xia X, Chen YE, Xu J. Fast, accurate parsing of antibody structures and antibody-antigen interactions enables a comprehensive structural antibody database. bioRxiv. doi: 10.1101/2025.02.25.640196](https://www.biorxiv.org/content/10.1101/2025.02.25.640196v1.full)
+
 ## Contact
+
 Please report any bugs or suggestions to xiaoqiah@umich.edu
