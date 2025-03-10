@@ -26,7 +26,7 @@ This package provides:
    The SLURM script ```scripts/sbatch_rsync_mmcifs.sh``` executes ```scripts/run_rsync_mmcifs.py``` to download mmCIF files from PDBe.
    The downloaded files are stored in the ```database/mmCIF_divided``` directory, organized into subfolders named after the two middle letters of the corresponding PDB entries.
    For example, for PDB entry ```5zxv```, the script automatically retrieves its mmCIF file and saves it as ```database/mmCIF_divided/zx/5zxv.cif.gz```.
-   Users can modify ```scripts/run_rsync_mmcifs.py``` to download mmCIF files more efficiently from RCSB PDB, PDBe, or PDBj, depending on their location. For more details, refer to the instructions at https://www.wwpdb.org/ftp/pdb-ftp-sites.
+   Users can modify ```scripts/run_rsync_mmcifs.py``` to download mmCIF files more efficiently from RCSB PDB, PDBe, or PDBj, depending on their location. For more details, refer to the instructions at [wwPDB](https://www.wwpdb.org/ftp/pdb-ftp-sites).
 
    * Download the associated FASTA files
    ```bash
@@ -35,7 +35,7 @@ This package provides:
    The SLURM script ```scripts/sbatch_update_fastas.sh``` executes ```scripts/run_update_fastas.py``` to download or update FASTA files from the RCSB PDB website.
    The script ```scripts/run_update_fastas.py``` analyzes the output of the SLURM job ```scripts/sbatch_rsync_mmcifs.sh``` to identify the PDB entries that need updating or have become obsolete, generating two mmCIF list files: ```database/list_update_cifs.txt``` and ```database/list_obsolete_cifs.txt```.
    The downloaded FASTA files are stored in the ```database/fasta_divided``` directory, organized into subfolders named after the two middle letters of the corresponding PDB entries.
-   For example, for PDB entry ```5zxv```, the script automatically retrieves its FASTA content from https://www.rcsb.org/fasta/entry/5zxv/display and saves it as ```database/fasta_divided/zx/5zxv.fasta```.
+   For example, for PDB entry ```5zxv```, the script automatically retrieves its FASTA content from [RCSB PDB: 5zxv](https://www.rcsb.org/fasta/entry/5zxv/display) and saves it as ```database/fasta_divided/zx/5zxv.fasta```.
 
 1. Run and test SAAINT-parser
    Users can run SAAINT-parser with a PDB entry as the only input. For example:
