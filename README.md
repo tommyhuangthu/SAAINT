@@ -71,16 +71,45 @@ This package provides:
    We recommend using the command with ```-list``` option for updating SAAINT-DB efficiently.
       
 1. Build SAAINT-DB
+   To build the SAAINT-DB databases, run:
    ```bash
    python3 ./scripts/run_saaintdb_builder.py
    ```
-   This command merges all the ```*_aai_all.tsv``` and ```*_aai_rep.tsv``` files to build the SAAINT-DB full and representative databases, respectively. The SAAINT-DB full dataset is saved as saaintdb_2025012908_all.xlsx and saaintdb_2025012908_all.xlsx, where the digits stand for the timestamp. Similarly, the SAAINT-DB representative dataset is saved as saaintdb_2025012908_rep.xlsx and saaintdb_2025012908_rep.xlsx.
+  This command merges all ```*_aai_all.tsv``` and ```*_aai_rep.tsv``` files to generate the SAAINT-DB full and representative datasets. \
+  The full dataset is saved as is saved as ```saaintdb_{timestamp}_all.xlsx``` and ```saaintdb_{timestamp}_all.tsv```.\
+  The representative dataset is saved as ```saaintdb_{timestamp}_rep.xlsx``` and ```saaintdb_{timestamp}_rep.tsv```. Here, <timestamp> (e.g., 2025012908) represents the date and time of the database build.
 
 ## Analyzing SAAINT-DB
 1. Analyze SAAINT-DB
+   To make statistical analyses of the SAAINT-DB data entries, run:
    ```bash
     python3 scripts/run_saaint_analyzer.py saaintdb_2025012908_all.xlsx -j <jobname>
     ```
+   The ```<jobname>``` takes the following options:
+   ```date```:
+   ```classification```:
+   ```method```:
+   ```resolution```:
+   ```publication```:
+   ```asym_id```:
+   ```plot_pdb_num```:
+   ```count_pdb_num```:
+   ```count_data_num```:
+   ```ab_spe```:
+   ```ab_type```:
+   ```HL_inf_res_num```:
+   ```HL_chain_len```:
+   ```radius```:
+   ```ag_spe```:
+   ```ag_type```:
+   ```ab_ag_inf_res_num```:
+   ```cdr_inf_res_num```:
+   ```cdr_inf_res_ratio```:
+   ```ag_chain_num```:
+   ```num_pdbs_with_paired_vhvl```:
+   ```num_pdbs_with_ag```
+   ```affinity```:
+   ```num_pdbs_with_affinity```:
 ## Reference
 [Huang X, Zhou J, Chen S, Xia X, Chen YE, Xu J. Fast, accurate parsing of antibody structures and antibody-antigen interactions enables a comprehensive structural antibody database. bioRxiv. doi: 10.1101/2025.02.25.640196](https://www.biorxiv.org/content/10.1101/2025.02.25.640196v1.full)
 ## Contact
