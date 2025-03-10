@@ -38,18 +38,18 @@ This package provides:
    For example, for PDB entry ```5zxv```, the script automatically retrieves its FASTA content from https://www.rcsb.org/fasta/entry/5zxv/display and saves it as ```database/fasta_divided/zx/5zxv.fasta```.
 
 1. Run and test SAAINT-parser
-   Users can simply run SAAINT-parser with a PDB entry as the only input, e.g.:
+   Users can run SAAINT-parser with a PDB entry as the only input. For example:
    ```bash
    python3 ./scripts/run_saaint_parser.py 5zxv
    ```
-   or run SAAINT-parser with options --verbose (or -v) to print out the program deails (for debugging):
+  To enable verbose output for debugging, use the ```--verbose``` (or ```-v```) option:
    ```bash
    python3 ./scripts/run_saaint_parser.py -v 5zxv
    ```
-   Successfully identified antibodies and antibody-antigen interactions will be saved into a folder named ```zx``` (the two middle letters of ```5zxv```).
-   File ```zx/5zxv_aai_all.tsv``` records all identified antibodies or AAIs.
-   File ```5zxv_aai_rep.tsv``` records representative antibodies or AAIs (see Reference for details).
-   File ```5zxv_paired_ab_ag_ids.tsv``` records paired antibody-antigen chain IDs.
+   Successfully identified antibodies and antibody-antigen interactions are saved in a folder named after the two middle letters of the PDB entry. For example, for ```5zxv```, the results are stored in the ```zx``` directory:
+   * ```zx/5zxv_aai_all.tsv```: contains all identified antibodies or AAIs.
+   * ```5zxv_aai_rep.tsv```: records representative antibodies or AAIs (see Reference for details).
+   * ```5zxv_paired_ab_ag_ids.tsv```: lists paired antibody-antigen chain IDs, and labels representative and nonrepresentative pairs.
 
 1. Run SAAINT-parser to process all mmCIF files
    ```bash
