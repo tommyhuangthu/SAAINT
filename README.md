@@ -79,7 +79,7 @@ This package provides:
 ## Analyzing SAAINT-DB
 1. Analyze SAAINT-DB
    ```bash
-    python3 scripts/run_saaint_analyzer.py saaintdb_2025012908_all.xlsx -j <task_name>
+    python3 scripts/run_saaint_analyzer.py saaintdb_2025012908_all.xlsx -j <jobname>
     ```
 ## Reference
 [Huang X, Zhou J, Chen S, Xia X, Chen YE, Xu J. Fast, accurate parsing of antibody structures and antibody-antigen interactions enables a comprehensive structural antibody database. bioRxiv. doi: 10.1101/2025.02.25.640196](https://www.biorxiv.org/content/10.1101/2025.02.25.640196v1.full)
