@@ -23,11 +23,10 @@ This package provides:
    ```bash
    ./scripts/sbatch_rsync_mmcifs.sh
    ```
-   The SLURM script ```scripts/sbatch_rsync_mmcifs.sh``` will call ```scripts/run_rsync_mmcifs.py``` to download mmCIF files from the PDBe.
-   The downloaded mmCIF files are saved into the database/mmCIF_divided directory, and specifically, a set of folders named with the two middle letters of PDB entries.
-   For example, for PDB entry ```5zxv```, the script can automatically rsync its mmCIF file, saving into ```database/mmCIF_divided/zx/5zxv.cif.gz```.
-   Users can also modify ```scripts/run_rsync_mmcifs.py``` to download mmCIFs from RCSB PDB, PDBe, or PDBj (see the instructions at
-   https://www.wwpdb.org/ftp/pdb-ftp-sites), depending on their locations.
+   The SLURM script ```scripts/sbatch_rsync_mmcifs.sh``` executes ```scripts/run_rsync_mmcifs.py``` to download mmCIF files from PDBe.
+   The downloaded files are stored in the ```database/mmCIF_divided``` directory, organized into subfolders named after the two middle letters of the corresponding PDB entries.
+   For example, for PDB entry ```5zxv```, the script automatically retrieves its mmCIF file and saves it as ```database/mmCIF_divided/zx/5zxv.cif.gz```.
+   Users can modify ```scripts/run_rsync_mmcifs.py``` to download mmCIF files more efficiently from RCSB PDB, PDBe, or PDBj, depending on their location. For more details, refer to the instructions at https://www.wwpdb.org/ftp/pdb-ftp-sites.
 
    * Download the associated FASTA files
    ```bash
