@@ -1,13 +1,20 @@
-# SAAINT （<u>S</u>tructural <u>A</u>ntibody and <u>A</u>ntibody-antigen <u>INT</u>eraction）
-This package provides the source code for SAAINT-parser, building and analyzing SAAINT-DB.
+# SAAINT
+SAAINT stands for <u>S</u>tructural <u>A</u>ntibody and <u>A</u>ntibody-antigen <u>INT</u>eraction. This package provides the source code for implementing SAAINT-parser, and building, analyzing, and updating the resulting SAAINT database, SAAINT-DB.
 
 ## Installation and running SAAINT-parser
+1. Configure the environment
+   ```bash
+   conda create -n saaint python=3.10 biopython=1.84 numpy=1.26.3 matplotlib=3.10.0 seaborn=0.13.2 urllib3=2.2.1 pandas=2.2.3
+   conda activate saaint
+   ```
+   
 1. Clone this repository
    ```bash
    git clone https://github.com/tommyhuangthu/SAAINT.git
    cd SAAINT/
    mkdir -p database/mmCIF_divided database/fasta_divided database/saaint_divided
    ```
+   
 1. Rsync mmCIF files from the Protein Data Bank (PDB) and download mmCIF-associated FASTA files
    * rsync PDB mmCIF files
    ```bash
