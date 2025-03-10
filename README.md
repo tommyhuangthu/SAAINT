@@ -30,7 +30,7 @@ SAAINT stands for <u>S</u>tructural <u>A</u>ntibody and <u>A</u>ntibody-antigen 
    ./scripts/sbatch_update_fastas.sh
    ```
    The SLURM script ```scripts/sbatch_update_fastas.sh``` will call ```scripts/run_update_fastas.py``` to download or update FASTA files
-   from the RCSB PDB website. The downloaded FASTA files are saved into the database/fasta_divided directory, and specifically, a set of folders named with the two middle letters of PDB entries. For example, for PDB entry ```5zxv```, the script can automatically retrieve its FASTA content from ```https://www.rcsb.org/fasta/entry/5zxv/display```
+   from the RCSB PDB website. The downloaded FASTA files are saved into the database/fasta_divided directory, and specifically, a set of folders named with the two middle letters of PDB entries. For example, for PDB entry ```5zxv```, the script can automatically retrieve its FASTA content from https://www.rcsb.org/fasta/entry/5zxv/display
    and save it into ```database/fasta_divided/zx/5zxv.fasta```.
 
 1. Run and test SAAINT-parser
