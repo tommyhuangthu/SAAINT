@@ -53,11 +53,14 @@ SAAINT stands for <u>S</u>tructural <u>A</u>ntibody and <u>A</u>ntibody-antigen 
    ```bash
     python3 ./scripts/run_submit_saaint_parser_jobs.py -list <mmCIF_list> <work_dir> <n_cpus>
     ```
-
+   The argument ```<mmCIF_list>``` represents a list of mmCIF files to be processed, e.g., ```database/list_update_cifs.txt```. The ```<work_dir>``` and ```<n_cpus>``` are the same as above.\
+   We recommend users to run the command with ```-path``` for processing all mmCIFs for the first time. For updating SAAINT-
+   
 1. Build SAAINT-DB
    ```bash
-    python3 ./scripts/run_saaintdb_builder.py
-    ```
+   python3 ./scripts/run_saaintdb_builder.py
+   ```
+   The 
 
 ## Analyzing SAAINT-DB
 1. Analyze SAAINT-DB
