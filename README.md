@@ -16,19 +16,20 @@ SAAINT stands for <u>S</u>tructural <u>A</u>ntibody and <u>A</u>ntibody-antigen 
    ```
    
 1. Rsync mmCIF files from the Protein Data Bank (PDB) and download mmCIF-associated FASTA files
-   * rsync PDB mmCIF files
+   * Download mmCIF files from the PDB
    ```bash
    ./scripts/sbatch_rsync_mmcifs.sh
    ```
-   The provided bash script ```./scripts/sbatch_rsync_mmcifs.sh``` will call ```./scripts/run_rsync_mmcifs.py``` to download mmCIF files from the PDBe.
-   However, users can modify ```scripts/run_rsync_mmcifs.py``` to download mmCIFs from RCSB PDB, PDBe, or PDBj (follow the instructions at
-   https://www.wwpdb.org/ftp/pdb-ftp-sites).
+   The SLURM script ```scripts/sbatch_rsync_mmcifs.sh``` will call ```scripts/run_rsync_mmcifs.py``` to download mmCIF files from the PDBe.
+   The downloaded mmCIF files are saved into the database/mmCIF_divided directory, and specifically, a set of folders named with the two middle letters of PDB entries.
+   Users can also modify ```scripts/run_rsync_mmcifs.py``` to download mmCIFs from RCSB PDB, PDBe, or PDBj (see the instructions at
+   https://www.wwpdb.org/ftp/pdb-ftp-sites), depending on their locations.
 
-   * Download associated FASTA files
+   * Download the associated FASTA files
    ```bash
    ./scripts/sbatch_update_fastas.sh
    ```
-   The provided bash script ```./scripts/sbatch_update_fastas.sh``` will call ```./scripts/run_update_fastas.py``` to download or update FASTA files
+   The SLURM script ```scripts/sbatch_update_fastas.sh``` will call ```scripts/run_update_fastas.py``` to download or update FASTA files
    from the RCSB PDB website. For example, for PDB entry ```5zxv```, the script can automatically retrieve its FASTA content from ```https://www.rcsb.org/fasta/entry/5zxv```
    and save it into ```database/fasta_divided/zx/5zxv.fasta```.
 
