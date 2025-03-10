@@ -32,11 +32,10 @@ This package provides:
    ```bash
    ./scripts/sbatch_update_fastas.sh
    ```
-   The SLURM script ```scripts/sbatch_update_fastas.sh``` will call ```scripts/run_update_fastas.py``` to download or update FASTA files from the RCSB PDB website.
-   ```scripts/run_update_fastas.py``` parses the output of the SLURM job ```scripts/sbatch_rsync_mmcifs.sh``` to identify the PDB entries that need to be updated or are obsolete, generating two mmCIF list files, ```database/list_update_cifs.txt``` and ```database/list_obsolete_cifs.txt```.
-   The downloaded FASTA files are saved into the ```database/fasta_divided``` directory, and specifically, a set of folders named with the two middle letters of PDB entries.
-   For example, for PDB entry ```5zxv```, the script can automatically retrieve its FASTA content from https://www.rcsb.org/fasta/entry/5zxv/display
-   and save it into ```database/fasta_divided/zx/5zxv.fasta```.
+   The SLURM script ```scripts/sbatch_update_fastas.sh``` executes ```scripts/run_update_fastas.py``` to download or update FASTA files from the RCSB PDB website.
+   The script ```scripts/run_update_fastas.py``` analyzes the output of the SLURM job ```scripts/sbatch_rsync_mmcifs.sh``` to identify the PDB entries that need updating or have become obsolete, generating two mmCIF list files: ```database/list_update_cifs.txt``` and ```database/list_obsolete_cifs.txt```.
+   The downloaded FASTA files are stored in the ```database/fasta_divided``` directory, organized into subfolders named after the two middle letters of the corresponding PDB entries.
+   For example, for PDB entry ```5zxv```, the script automatically retrieves its FASTA content from https://www.rcsb.org/fasta/entry/5zxv/display and saves it as ```database/fasta_divided/zx/5zxv.fasta```.
 
 1. Run and test SAAINT-parser
    Users can simply run SAAINT-parser with a PDB entry as the only input, e.g.:
