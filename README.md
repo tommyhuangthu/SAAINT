@@ -46,7 +46,7 @@ This package provides:
    ```bash
    python3 ./scripts/run_saaint_parser.py -v 5zxv
    ```
-   Successfully identified antibodies and antibody-antigen interactions are saved in a folder named after the two middle letters of the PDB entry. For example, for ```5zxv```, the results are stored in the ```zx``` directory:\
+   Successfully identified antibodies and antibody-antigen interactions are saved in a folder named after the two middle letters of the PDB entry. For example, for ```5zxv```, the results are stored in the ```zx``` folder:\
    ```zx/5zxv_aai_all.tsv```: contains all identified antibodies or AAIs.\
    ```zx/5zxv_aai_rep.tsv```: records representative antibodies or AAIs (see Reference for details).\
    ```zx/5zxv_paired_ab_ag_ids.tsv```: lists paired antibody-antigen chain IDs, and labels representative and nonrepresentative pairs.
