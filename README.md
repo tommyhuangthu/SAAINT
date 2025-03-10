@@ -113,4 +113,4 @@ This package provides:
 ## Reference
 [Huang X, Zhou J, Chen S, Xia X, Chen YE, Xu J. Fast, accurate parsing of antibody structures and antibody-antigen interactions enables a comprehensive structural antibody database. bioRxiv. doi: 10.1101/2025.02.25.640196](https://www.biorxiv.org/content/10.1101/2025.02.25.640196v1.full)
 ## Contact
-Xiaoqiang Huang: xiaoqiah@umich.edu
+Please report any bugs or suggestions to xiaoqiah@umich.edu
