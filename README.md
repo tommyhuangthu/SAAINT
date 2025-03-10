@@ -85,31 +85,31 @@ This package provides:
    ```bash
     python3 scripts/run_saaint_analyzer.py saaintdb_2025012908_all.xlsx -j <jobname>
     ```
-   The ```<jobname>``` takes the following options:
-   ```date```:
-   ```classification```:
-   ```method```:
-   ```resolution```:
-   ```publication```:
-   ```asym_id```:
-   ```plot_pdb_num```:
-   ```count_pdb_num```:
-   ```count_data_num```:
-   ```ab_spe```:
-   ```ab_type```:
-   ```HL_inf_res_num```:
-   ```HL_chain_len```:
-   ```radius```:
-   ```ag_spe```:
-   ```ag_type```:
-   ```ab_ag_inf_res_num```:
-   ```cdr_inf_res_num```:
-   ```cdr_inf_res_ratio```:
-   ```ag_chain_num```:
-   ```num_pdbs_with_paired_vhvl```:
-   ```num_pdbs_with_ag```
-   ```affinity```:
-   ```num_pdbs_with_affinity```:
+   The ```<jobname>``` takes the following options:\
+   ```date```:\
+   ```classification```:\
+   ```method```:\
+   ```resolution```:\
+   ```publication```:\
+   ```asym_id```:\
+   ```plot_pdb_num```:\
+   ```count_pdb_num```:\
+   ```count_data_num```:\
+   ```ab_spe```:\
+   ```ab_type```:\
+   ```HL_inf_res_num```:\
+   ```HL_chain_len```:\
+   ```radius```:\
+   ```ag_spe```:\
+   ```ag_type```:\
+   ```ab_ag_inf_res_num```:\
+   ```cdr_inf_res_num```:\
+   ```cdr_inf_res_ratio```:\
+   ```ag_chain_num```:\
+   ```num_pdbs_with_paired_vhvl```:\
+   ```num_pdbs_with_ag```:\
+   ```affinity```:\
+   ```num_pdbs_with_affinity```:\
 ## Reference
 [Huang X, Zhou J, Chen S, Xia X, Chen YE, Xu J. Fast, accurate parsing of antibody structures and antibody-antigen interactions enables a comprehensive structural antibody database. bioRxiv. doi: 10.1101/2025.02.25.640196](https://www.biorxiv.org/content/10.1101/2025.02.25.640196v1.full)
 ## Contact
