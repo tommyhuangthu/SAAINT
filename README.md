@@ -39,7 +39,7 @@ This package provides:
    The downloaded FASTA files are stored in the ```database/fasta_divided``` directory, organized into subfolders named after the two middle letters of the corresponding PDB entries.
    For example, for PDB entry ```5zxv```, the script automatically retrieves its FASTA content from [RCSB PDB: 5zxv](https://www.rcsb.org/fasta/entry/5zxv/display) and saves it as ```database/fasta_divided/zx/5zxv.fasta```.
 
-1. Run and test SAAINT-parser
+1. Run and test SAAINT-parser\
    Users can run SAAINT-parser with a PDB entry as the only input. For example:
    ```bash
    python3 ./scripts/run_saaint_parser.py 5zxv
