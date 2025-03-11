@@ -20,7 +20,7 @@ This package provides:
    mkdir -p database/mmCIF_divided database/fasta_divided database/saaint_divided
    ```
    
-1. Rsync mmCIF files from the Protein Data Bank (PDB) and download mmCIF-associated FASTA files
+1. <strong>Rsync mmCIF files from the Protein Data Bank (PDB) and download mmCIF-associated FASTA files</strong>
    * Download mmCIF files from the PDB
    ```bash
    ./scripts/sbatch_rsync_mmcifs.sh
