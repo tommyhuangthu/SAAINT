@@ -22,6 +22,11 @@ This package provides:
    mkdir -p database/mmCIF_divided database/fasta_divided database/saaint_divided
    ```
    
+1. Modify related directories and paths within the source code before running
+   
+   Some directories or paths are hard coded within the source code, and thus a direct run of the code may cause errors.
+   
+   
 1. Rsync mmCIF files from the Protein Data Bank (PDB) and download mmCIF-associated FASTA files
    
    * Download mmCIF files from the PDB
@@ -42,7 +47,7 @@ This package provides:
    The downloaded FASTA files are stored in the ```database/fasta_divided``` directory, organized into subfolders named after the two middle letters of the corresponding PDB entries.
    For example, for PDB entry ```5zxv```, the script automatically retrieves its FASTA content from [RCSB PDB: 5zxv](https://www.rcsb.org/fasta/entry/5zxv/display) and saves it as ```database/fasta_divided/zx/5zxv.fasta```.
 
-1. Run and test SAAINT-parser</strong>
+1. Run and test SAAINT-parser
 
    Users can run SAAINT-parser with a PDB entry as the only input. For example:
    ```bash
@@ -83,7 +88,7 @@ This package provides:
    python3 ./scripts/run_saaintdb_builder.py
    ```
   This command merges all ```*_aai_all.tsv``` and ```*_aai_rep.tsv``` files to generate the SAAINT-DB full and representative datasets. \
-  The full dataset is saved as is saved as ```saaintdb_{timestamp}_all.xlsx``` and ```saaintdb_{timestamp}_all.tsv```. \
+  The SAAINT-DB full dataset is saved as ```saaintdb_{timestamp}_all.xlsx``` and ```saaintdb_{timestamp}_all.tsv```. \
   The representative dataset is saved as ```saaintdb_{timestamp}_rep.xlsx``` and ```saaintdb_{timestamp}_rep.tsv```. Here, ```{timestamp}``` (e.g., 2025012908) represents the date and time of the database build. \
   For more details, refer to ```saaintdb/saaintdb_2025012908_all.xlsx```, ```saaintdb/saaintdb_2025012908_all.tsv```, ```saaintdb/saaintdb_2025012908_rep.xlsx```, and ```saaintdb/saaintdb_2025012908_all.tsv```.
 
