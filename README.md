@@ -84,6 +84,7 @@ This package provides:
 ## Analyzing SAAINT-DB and antibody-antigen binding affinity data
 
 1. Analyze SAAINT-DB
+   
    To make statistical analyses of the SAAINT-DB data entries, run:
    ```bash
    python3 scripts/run_saaint_analyzer.py saaintdb_2025012908_all.xlsx -j <jobname>
