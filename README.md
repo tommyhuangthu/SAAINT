@@ -102,15 +102,15 @@ This package provides:
    ```ab_type```: analyzes SAAINT-parser annotated antibody types\
    ```HL_inf_res_num```: analyzes and plots the number of interface residues versus antibody types\
    ```HL_chain_len```: analyzes and plots the\
-   ```radius```:\
-   ```ag_spe```:\
-   ```ag_type```:\
-   ```ab_ag_inf_res_num```:\
-   ```cdr_inf_res_num```:\
-   ```cdr_inf_res_ratio```:\
-   ```ag_chain_num```:\
-   ```num_pdbs_with_paired_vhvl```:\
-   ```num_pdbs_with_ag```:
+   ```radius```: plots the distribution of mean radius versus scFv and VHVL types\
+   ```ag_spe```: plots the number of top antigen species\
+   ```ag_type```: plots the number of antigen types\
+   ```ab_ag_inf_res_num```: plots the histogram for the number of antibody-antigen interface residues\
+   ```cdr_inf_res_num```: plots the histogram for the number of interface CDR residues\
+   ```cdr_inf_res_ratio```: plots the histogram for the ratio of the number of interface CDR residues to the total number of interface antibody residues\
+   ```ag_chain_num```: plots the number of antigens with varying number of chains\
+   ```num_pdbs_with_paired_vhvl```: count the number of PDB entries with paired VH/VL\
+   ```num_pdbs_with_ag```: count the number of PDB entries with antigen
 
 1. Analyze antibody-antigen binding affinity data
 
@@ -118,8 +118,9 @@ This package provides:
    ```bash
    python3 scripts/run_saaint_analyzer.py saaintdb_2025012908_all.xlsx -j <jobname>
    ```
-   ```affinity```:\
-   ```num_pdbs_with_affinity```:
+   The ```<jobname>``` takes the following options:\
+   ```affinity```: plot the histrogram of p<i>K</i>d \
+   ```num_pdbs_with_affinity```: count the number of PDB entries with antibody-antigen binding affinity data
    
 ## Reference
 
