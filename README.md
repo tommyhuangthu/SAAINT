@@ -135,4 +135,4 @@ This package provides:
 
 ## Contact
 
-Please report any bugs or suggestions to xiaoqiah@umich.edu
+Please report any bugs or suggestions to [Xiaoqiang Huang](xiaoqiah@umich.edu)
