@@ -7,7 +7,7 @@ This package provides:
 
 ## Installation and running SAAINT-parser
 
-<strong>1. Configure the environment</strong>
+1. <strong>Configure the environment</strong>
    ```bash
    conda create -n saaint python=3.10 biopython=1.84 numpy=1.26.3 matplotlib=3.10.0 seaborn=0.13.2 urllib3=2.2.1 pandas=2.2.3
    conda activate saaint
