@@ -7,20 +7,23 @@ This package provides:
 
 ## Installation and running SAAINT-parser
 
-1. <strong>Configure the environment</strong>
+1. Configure the environment
+
    ```bash
    conda create -n saaint python=3.10 biopython=1.84 numpy=1.26.3 matplotlib=3.10.0 seaborn=0.13.2 urllib3=2.2.1 pandas=2.2.3
    conda activate saaint
    ```
    
-1. <strong>Clone this repository</strong>
+1. Clone this repository
+   
    ```bash
    git clone https://github.com/tommyhuangthu/SAAINT.git
    cd SAAINT/
    mkdir -p database/mmCIF_divided database/fasta_divided database/saaint_divided
    ```
    
-1. <strong>Rsync mmCIF files from the Protein Data Bank (PDB) and download mmCIF-associated FASTA files</strong>
+1. Rsync mmCIF files from the Protein Data Bank (PDB) and download mmCIF-associated FASTA files
+   
    * Download mmCIF files from the PDB
    ```bash
    ./scripts/sbatch_rsync_mmcifs.sh
@@ -39,7 +42,8 @@ This package provides:
    The downloaded FASTA files are stored in the ```database/fasta_divided``` directory, organized into subfolders named after the two middle letters of the corresponding PDB entries.
    For example, for PDB entry ```5zxv```, the script automatically retrieves its FASTA content from [RCSB PDB: 5zxv](https://www.rcsb.org/fasta/entry/5zxv/display) and saves it as ```database/fasta_divided/zx/5zxv.fasta```.
 
-1. <strong>Run and test SAAINT-parser</strong><br>
+1. Run and test SAAINT-parser</strong>
+
    Users can run SAAINT-parser with a PDB entry as the only input. For example:
    ```bash
    python3 ./scripts/run_saaint_parser.py 5zxv
@@ -53,7 +57,8 @@ This package provides:
    ```zx/5zxv_aai_rep.tsv```: records representative antibodies or AAIs (see Reference for details).\
    ```zx/5zxv_paired_ab_ag_ids.tsv```: lists paired antibody-antigen chain IDs, and labels representative and nonrepresentative pairs.
      
-1. <strong>Run SAAINT-parser to process all mmCIF files</strong><br>
+1. Run SAAINT-parser to process all mmCIF files
+   
    To process all mmCIF files using SAAINT-parser, run:
    ```bash
    python3 ./scripts/run_submit_saaint_parser_jobs.py -path <mmCIF_path> <work_dir> <n_cpus>
@@ -72,7 +77,8 @@ This package provides:
    <br>
    We recommend using the command with ```-list``` option for updating SAAINT-DB efficiently.
       
-1. <strong>Build SAAINT-DB</strong><br>
+1. Build SAAINT-DB
+
    To build the SAAINT-DB databases, run:
    ```bash
    python3 ./scripts/run_saaintdb_builder.py
