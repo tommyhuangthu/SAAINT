@@ -13,7 +13,7 @@ This package provides:
    conda activate saaint
    ```
    
-1. Clone this repository
+1. <strong>Clone this repository</strong>
    ```bash
    git clone https://github.com/tommyhuangthu/SAAINT.git
    cd SAAINT/
@@ -39,7 +39,7 @@ This package provides:
    The downloaded FASTA files are stored in the ```database/fasta_divided``` directory, organized into subfolders named after the two middle letters of the corresponding PDB entries.
    For example, for PDB entry ```5zxv```, the script automatically retrieves its FASTA content from [RCSB PDB: 5zxv](https://www.rcsb.org/fasta/entry/5zxv/display) and saves it as ```database/fasta_divided/zx/5zxv.fasta```.
 
-1. Run and test SAAINT-parser\
+1. <strong>Run and test SAAINT-parser</strong><br>
    Users can run SAAINT-parser with a PDB entry as the only input. For example:
    ```bash
    python3 ./scripts/run_saaint_parser.py 5zxv
@@ -53,7 +53,7 @@ This package provides:
    ```zx/5zxv_aai_rep.tsv```: records representative antibodies or AAIs (see Reference for details).\
    ```zx/5zxv_paired_ab_ag_ids.tsv```: lists paired antibody-antigen chain IDs, and labels representative and nonrepresentative pairs.
      
-1. Run SAAINT-parser to process all mmCIF files
+1. <strong>Run SAAINT-parser to process all mmCIF files</strong><br>
    To process all mmCIF files using SAAINT-parser, run:
    ```bash
     python3 ./scripts/run_submit_saaint_parser_jobs.py -path <mmCIF_path> <work_dir> <n_cpus>
@@ -72,7 +72,7 @@ This package provides:
    <br>
    We recommend using the command with ```-list``` option for updating SAAINT-DB efficiently.
       
-1. Build SAAINT-DB
+1. <strong>Build SAAINT-DB</strong><br>
    To build the SAAINT-DB databases, run:
    ```bash
    python3 ./scripts/run_saaintdb_builder.py
@@ -81,7 +81,7 @@ This package provides:
   The full dataset is saved as is saved as ```saaintdb_{timestamp}_all.xlsx``` and ```saaintdb_{timestamp}_all.tsv```.\
   The representative dataset is saved as ```saaintdb_{timestamp}_rep.xlsx``` and ```saaintdb_{timestamp}_rep.tsv```. Here, <timestamp> (e.g., 2025012908) represents the date and time of the database build.
 
-## Analyzing SAAINT-DB
+## Analyzing SAAINT-DB and antibody-antigen binding affinity data
 
 1. Analyze SAAINT-DB
    To make statistical analyses of the SAAINT-DB data entries, run:
