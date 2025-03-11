@@ -84,8 +84,9 @@ This package provides:
    python3 ./scripts/run_saaintdb_builder.py
    ```
   This command merges all ```*_aai_all.tsv``` and ```*_aai_rep.tsv``` files to generate the SAAINT-DB full and representative datasets. \
-  The full dataset is saved as is saved as ```saaintdb_{timestamp}_all.xlsx``` and ```saaintdb_{timestamp}_all.tsv```.\
-  The representative dataset is saved as ```saaintdb_{timestamp}_rep.xlsx``` and ```saaintdb_{timestamp}_rep.tsv```. Here, <timestamp> (e.g., 2025012908) represents the date and time of the database build.
+  The full dataset is saved as is saved as ```saaintdb_{timestamp}_all.xlsx``` and ```saaintdb_{timestamp}_all.tsv```. \
+  The representative dataset is saved as ```saaintdb_{timestamp}_rep.xlsx``` and ```saaintdb_{timestamp}_rep.tsv```. Here, <timestamp> (e.g., 2025012908) represents the date and time of the database build. \
+  For more details, refer to ```saaintdb/saaintdb_2025012908_all.xlsx```, ```saaintdb/saaintdb_2025012908_all.tsv```, ```saaintdb/saaintdb_2025012908_rep.xlsx```, and ```saaintdb/saaintdb_2025012908_all.tsv```.
 
 ## Analyzing SAAINT-DB and antibody-antigen binding affinity data
 
@@ -93,7 +94,7 @@ This package provides:
    
    To make statistical analyses of the SAAINT-DB data entries, run:
    ```bash
-   python3 scripts/run_saaint_analyzer.py saaintdb_2025012908_all.xlsx -j <jobname>
+   python3 scripts/run_saaint_analyzer.py saaintdb/saaintdb_2025012908_all.xlsx -j <jobname>
    ```
    The ```<jobname>``` takes the following options:\
    ```date```: analyzes the deposited dates and released dates of PDB entries\
@@ -123,7 +124,7 @@ This package provides:
 
    To make statistical analyses of the SAAINT-DB data entries, run:
    ```bash
-   python3 scripts/run_saaint_analyzer.py saaintdb_2025012908_all.xlsx -j <jobname>
+   python3 scripts/run_saaint_analyzer.py saaintdb/saaintdb_affinity_rep.tsv -j <jobname>
    ```
    The ```<jobname>``` takes the following options:\
    ```affinity```: plot the histrogram of p<i>K</i>d \
