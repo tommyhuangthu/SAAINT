@@ -1,10 +1,10 @@
 # SAAINT
 
-SAAINT stands for <ins>S</ins>tructures of <ins>A</ins>ntibodies and antibody-<ins>A</ins>ntigen <ins>INT</ins>eractions.
+SAAINT stands for <strong><ins>S</ins>tructures of <ins>A</ins>ntibodies and Antibody-<ins>A</ins>ntigen <ins>INT</ins>eractions</strong>.
 
 This package provides: 
-* an implementation of the ```SAAINT-parser``` workflow designed for fast and accurate extraction and annotation of structures of antibodies (Abs) and antibody-antigen interactions (AAIs) from the Protein Data Bank (PDB), yielding a comprehensive and up-to-date structural antibody database, ```SAAINT-DB```.
-* source code for building, analyzing, and updating ```SAAINT-DB```.
+* Implementation of the ```SAAINT-parser``` workflow, designed for fast and accurate extraction and annotation of antibody (Ab) structures and antibody-antigen interactions (AAIs) from the Protein Data Bank (PDB). This results in a comprehensive and up-to-date structural antibody database, ```SAAINT-DB```.
+* Source code for building, analyzing, and updating ```SAAINT-DB```.
 
 ## Installation and running SAAINT-parser
 
@@ -76,7 +76,9 @@ This package provides:
    ```zx/5zxv_aai_all.tsv```: contains all identified antibodies or AAIs.\
    ```zx/5zxv_aai_rep.tsv```: records representative antibodies or AAIs (see Reference for details).\
    ```zx/5zxv_paired_ab_ag_ids.tsv```: lists paired antibody-antigen chain IDs, and labels representative and nonrepresentative pairs.
-     
+
+## Building SAAINT-DB
+
 1. Run SAAINT-parser to process all mmCIF files
    
    To process all mmCIF files using SAAINT-parser, run:
@@ -96,7 +98,7 @@ This package provides:
    ```<work_dir>``` and ```<n_cpus>```: Same as described above.\
    We recommend using the command with ```-list``` option for updating SAAINT-DB efficiently.
       
-1. Build SAAINT-DB
+1. Collecting SAAINT-parser results to build the SAAINT-DB datasets
 
    To build the SAAINT-DB databases, run:
    ```bash
