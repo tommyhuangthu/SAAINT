@@ -1,8 +1,9 @@
 # SAAINT
 
-SAAINT stands for <i>S</i>tructures of <i>A</i>ntibodies and antibody-<i>A</i>ntigen <i>INT</i>eractions. 
+SAAINT stands for <ins>S</ins>tructures of <ins>A</ins>ntibodies and antibody-<ins>A</ins>ntigen <ins>INT</ins>eractions.
+
 This package provides: 
-* an implementation of the ```SAAINT-parser``` workflow designed for fast and accurate extraction and annoatation of structures of antibodies (Abs) and antibody-antigen interactions (AAIs) from the Protein Data Bank (PDB), yielding a comprehensive and up-to-date structural antibody database, ```SAAINT-DB```.
+* an implementation of the ```SAAINT-parser``` workflow designed for fast and accurate extraction and annotation of structures of antibodies (Abs) and antibody-antigen interactions (AAIs) from the Protein Data Bank (PDB), yielding a comprehensive and up-to-date structural antibody database, ```SAAINT-DB```.
 * source code for building, analyzing, and updating ```SAAINT-DB```.
 
 ## Installation and running SAAINT-parser
@@ -19,19 +20,33 @@ This package provides:
    ```bash
    git clone https://github.com/tommyhuangthu/SAAINT.git
    cd SAAINT/
-   mkdir -p database/mmCIF_divided database/fasta_divided database/saaint_divided
+   mkdir -p record database/mmCIF_divided database/fasta_divided database/saaint_divided
    ```
+
+2. Clone the UniDesign, FASPR, and Pulchra repositories (used by SAAINT-parser)
+   
+   ```bash
+   git clone https://github.com/tommyhuangthu/UniDesign.git
+   git clone https://github.com/tommyhuangthu/FASPR.git
+   git clone https://github.com/euplotes/pulchra.git
+   ```
+   Then ```cd``` into each repository and build executibles of UniDesign, FASPR, and pulchra, following their instructions. \
+   For clarity, we assume these repositories are saved to the user's home directory (any directory is fine as long as the correct directories are specified for these executibles; see below).
    
 1. Modify related directories and paths within the source code before running
    
    Some directories or paths are hard coded within the source code, and thus a direct run of the code may cause errors.
+   Assume the user home directory is ```/home/username``` and the SAAINT package is saved as ```/home/username/SAAINT```, the following paths or directories need changes:\
+   In ```scripts/sbatch_rsync_mmcifs.sh```: Changes ```/home/xiaoqiah/turbo/work/SAAINT``` to ```/home/username/SAAINT```. \
+   In ```scripts/sbatch_update_fastas.sh```: Changes ```/home/xiaoqiah/turbo/work/SAAINT``` to ```/home/username/SAAINT```. \
+   In ```scripts/utils.py```: Changes the paths for UniDesign, FASPR, and Pulchra.
    
    
 1. Rsync mmCIF files from the Protein Data Bank (PDB) and download mmCIF-associated FASTA files
    
    * Download mmCIF files from the PDB
    ```bash
-   ./scripts/sbatch_rsync_mmcifs.sh
+   sbatch scripts/sbatch_rsync_mmcifs.sh
    ```
    The SLURM script ```scripts/sbatch_rsync_mmcifs.sh``` executes ```scripts/run_rsync_mmcifs.py``` to download mmCIF files from PDBe.
    The downloaded files are stored in the ```database/mmCIF_divided``` directory, organized into subfolders named after the two middle letters of the corresponding PDB entries.
@@ -40,7 +55,7 @@ This package provides:
 
    * Download the associated FASTA files
    ```bash
-   ./scripts/sbatch_update_fastas.sh
+   sbatch scripts/sbatch_update_fastas.sh
    ```
    The SLURM script ```scripts/sbatch_update_fastas.sh``` executes ```scripts/run_update_fastas.py``` to download or update FASTA files from the RCSB PDB website.
    The script ```scripts/run_update_fastas.py``` analyzes the output of the SLURM job ```scripts/sbatch_rsync_mmcifs.sh``` to identify the PDB entries that need updating or have become obsolete, generating two mmCIF list files: ```database/list_update_cifs.txt``` and ```database/list_obsolete_cifs.txt```.
