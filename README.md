@@ -179,7 +179,7 @@ This package provides:
 
 1. Collect SAAINT-parser results to update SAAINT-DB
 
-   To build the SAAINT-DB databases, run:
+   To update the SAAINT-DB databases, run:
    ```bash
    python3 ./scripts/run_saaintdb_builder.py
    ```
