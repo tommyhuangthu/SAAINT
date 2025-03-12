@@ -106,7 +106,7 @@ This package provides:
    ```
   This command merges all ```*_aai_all.tsv``` and ```*_aai_rep.tsv``` files to generate the SAAINT-DB full and representative datasets. \
   The SAAINT-DB full dataset is saved as ```saaintdb_{timestamp}_all.xlsx``` and ```saaintdb_{timestamp}_all.tsv```. \
-  The representative dataset is saved as ```saaintdb_{timestamp}_rep.xlsx``` and ```saaintdb_{timestamp}_rep.tsv```. Here, ```{timestamp}``` (e.g., 2025012908) represents the date and time of the database build. \
+  The representative dataset is saved as ```saaintdb_{timestamp}_rep.xlsx``` and ```saaintdb_{timestamp}_rep.tsv```. Here, ```{timestamp}``` (e.g., ```2025012908```) represents the date and time of the database build. \
   For more details, refer to ```saaintdb/saaintdb_2025012908_all.xlsx```, ```saaintdb/saaintdb_2025012908_all.tsv```, ```saaintdb/saaintdb_2025012908_rep.xlsx```, and ```saaintdb/saaintdb_2025012908_all.tsv```.
 
 ## Analyzing SAAINT-DB and antibody-antigen binding affinity data
