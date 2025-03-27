@@ -188,19 +188,34 @@ This package provides:
 
    Below we provide a head-to-head statistical comparison between SAAINT-DB (updated on Jan 29, 2025) and SAbDab (updated on Jan 17, 2025) 
 
-Item for comparison                                     | SAAINT-DB    | SAbDab   | SAbDab with corrections <sup>1</sup>
------------------------------------------------------:  | -----------: | -------: | ----------------------:
-Number of PDB entries                                   |  9,373       |  9,200   |  9,136
-Number of data entries                                  | 18,031       | 18,265   | 17,619
-Number of PDB entries with ≥1 paired VH/VL              |  7,518       |  7,362   |  7,320
-Number of data entries with ≥1 paired VH/VL             | 14,074       | 14,017   | 13,727
-Number of PDB entries with antigen                      |  7,138       |  7,471   |  7,427
-Number of data entries with antigen                     | 13,663       | 14,352   | 14,170
-Number of PDB entries with Ab-Ag binding affinity data  |  1,331       |    739   |    736
-Number of nonredundant Ab-Ag binding affinity data      |  1,444       |    739   |    736
+Item for comparison                            | SAAINT-DB    | SAbDab   | SAbDab with corrections <sup>1</sup>
+--------------------------------------------:  | -----------: | -------: | ----------------------:
+#{PDB entries}                                 |  9,373       |  9,200   |  9,136
+#{data entries}                                | 18,031       | 18,265   | 17,619
+#{PDB entries with ≥1 paired VH/VL}            |  7,518       |  7,362   |  7,320
+#{data entries with ≥1 paired VH/VL}           | 14,074       | 14,017   | 13,727
+#{PDB entries with Ag}                         |  7,138       |  7,471   |  7,427
+#{data entries with Ag}                        | 13,663       | 14,352   | 14,170
+#{PDB entries with Ab-Ag binding affinity data}|  1,331       |    739   |    736
+#{nonredundant Ab-Ag binding affinity data}    |  1,444       |    739   |    736
 
 <sup>1</sup> Obsolete and replaced PDB entries are excluded from SAbDab; for structures where multiple models are available for one assembly (such as NMR or some EM structures), only one data entry is retained.
-   
+
+
+## SAAINT-DB statistics
+
+   Below we provide the statistics of SAAINT-DB with continuous update. 
+
+Item for comparison                            | v.20250129   | v.20250313 | v.20250327
+--------------------------------------------:  | -----------: | ---------: | ---------:
+#{PDB entries}                                 |  9,373       |  9,562     |  9,609
+#{data entries}                                | 18,031       | 18,344     | 18,429
+#{PDB entries with ≥1 paired VH/VL}            |  7,518       |  7,676     |  7,707
+#{data entries with ≥1 paired VH/VL}           | 14,074       | 14,317     | 14,372
+#{PDB entries with Ag}                         |  7,138       |  7,314     |  7,353
+#{data entries with Ag}                        | 13,663       | 13,944     | 14,019
+
+
 ## Reference
 
 [Huang X, Zhou J, Chen S, Xia X, Chen YE, Xu J. Fast, accurate parsing of antibody structures and antibody-antigen interactions enables a comprehensive structural antibody database. bioRxiv. doi: 10.1101/2025.02.25.640196](https://www.biorxiv.org/content/10.1101/2025.02.25.640196v1.full)
