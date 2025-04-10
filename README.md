@@ -206,14 +206,14 @@ Item for comparison                            | SAAINT-DB    | SAbDab   | SAbDa
 
    Below we provide the statistics of SAAINT-DB with continuous update. 
 
-Item for comparison                            | v.20250129   | v.20250313 | v.20250327
---------------------------------------------:  | -----------: | ---------: | ---------:
-#{PDB entries}                                 |  9,373       |  9,562     |  9,609
-#{data entries}                                | 18,031       | 18,344     | 18,429
-#{PDB entries with ≥1 paired VH/VL}            |  7,518       |  7,676     |  7,707
-#{data entries with ≥1 paired VH/VL}           | 14,074       | 14,317     | 14,372
-#{PDB entries with Ag}                         |  7,138       |  7,314     |  7,353
-#{data entries with Ag}                        | 13,663       | 13,944     | 14,019
+Item for comparison                           | v.20250129 | v.20250313 | v.20250327 | v.20250410
+--------------------------------------------: | ---------: | ---------: | ---------: | ---------:
+#{PDB entries}                                |  9,373     |  9,562     |  9,609     |  9,673
+#{data entries}                               | 18,031     | 18,344     | 18,429     | 18,507
+#{PDB entries with ≥1 paired VH/VL}           |  7,518     |  7,676     |  7,707     |  7,762
+#{data entries with ≥1 paired VH/VL}          | 14,074     | 14,317     | 14,372     | 14,483
+#{PDB entries with Ag}                        |  7,138     |  7,314     |  7,353     |  7,414
+#{data entries with Ag}                       | 13,663     | 13,944     | 14,019     | 14,093
 
 
 ## Reference
