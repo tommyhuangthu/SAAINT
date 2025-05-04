@@ -115,7 +115,7 @@ This package provides:
    
    To make statistical analyses of the SAAINT-DB data entries, run:
    ```bash
-   python3 scripts/run_saaint_analyzer.py saaintdb/saaintdb_2025012908_all.xlsx -j <jobname>
+   python3 scripts/run_saaintdb_analyzer.py saaintdb/saaintdb_2025012908_all.xlsx -j <jobname>
    ```
    Here, ```<jobname>``` takes the following options:\
    ```date```: Analyzes the deposition and release dates of PDB entries.\
@@ -145,7 +145,7 @@ This package provides:
 
    To make statistical analyses of the SAAINT-DB data entries, run:
    ```bash
-   python3 scripts/run_saaint_analyzer.py saaintdb/saaintdb_affinity_rep.tsv -j <jobname>
+   python3 scripts/run_saaintdb_analyzer.py saaintdb/saaintdb_affinity_rep.tsv -j <jobname>
    ```
    Here, ```<jobname>``` takes the following options:\
    ```affinity```: Plots a histogram of pKd values.\
@@ -188,33 +188,18 @@ This package provides:
 
    Below we provide a head-to-head statistical comparison between SAAINT-DB (updated on Jan 29, 2025) and SAbDab (updated on Jan 17, 2025) 
 
-Item for comparison                            | SAAINT-DB    | SAbDab   | SAbDab with corrections <sup>1</sup>
---------------------------------------------:  | -----------: | -------: | ----------------------:
-#{PDB entries}                                 |  9,373       |  9,200   |  9,136
-#{data entries}                                | 18,031       | 18,265   | 17,619
-#{PDB entries with ≥1 paired VH/VL}            |  7,518       |  7,362   |  7,320
-#{data entries with ≥1 paired VH/VL}           | 14,074       | 14,017   | 13,727
-#{PDB entries with Ag}                         |  7,138       |  7,471   |  7,427
-#{data entries with Ag}                        | 13,663       | 14,352   | 14,170
-#{PDB entries with Ab-Ag binding affinity data}|  1,331       |    739   |    736
-#{nonredundant Ab-Ag binding affinity data}    |  1,444       |    739   |    736
+Item for comparison                            | SAAINT-DB    | SAbDab
+--------------------------------------------:  | -----------: | -------:
+#{PDB entries}                                 |  9,757       |  9,521
+#{data entries}                                | 19,128       | 18,744
+#{PDB entries with ≥1 paired VH/VL}            |  7,822       |  7,622
+#{data entries with ≥1 paired VH/VL}           | 14,747       | 14,420
+#{PDB entries with Ag}                         |  7,489       |  7,788
+#{data entries with Ag}                        | 14,316       | 14,869
+#{PDB entries with Ab-Ag binding affinity data}|  1,331       |    736
+#{nonredundant Ab-Ag binding affinity data}    |  1,444       |    736
 
 <sup>1</sup> Obsolete and replaced PDB entries are excluded from SAbDab; for structures where multiple models are available for one assembly (such as NMR or some EM structures), only one data entry is retained.
-
-
-## SAAINT-DB statistics
-
-   Below we provide the statistics of SAAINT-DB with continuous update. 
-
-Item for comparison                           | v.20250129 | v.20250313 | v.20250327 | v.20250410
---------------------------------------------: | ---------: | ---------: | ---------: | ---------:
-#{PDB entries}                                |  9,373     |  9,562     |  9,609     |  9,673
-#{data entries}                               | 18,031     | 18,344     | 18,429     | 18,507
-#{PDB entries with ≥1 paired VH/VL}           |  7,518     |  7,676     |  7,707     |  7,762
-#{data entries with ≥1 paired VH/VL}          | 14,074     | 14,317     | 14,372     | 14,483
-#{PDB entries with Ag}                        |  7,138     |  7,314     |  7,353     |  7,414
-#{data entries with Ag}                       | 13,663     | 13,944     | 14,019     | 14,093
-
 
 ## Reference
 
