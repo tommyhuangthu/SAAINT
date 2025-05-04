@@ -21,7 +21,7 @@ if __name__ == '__main__':
     os.system(f'rsync -rlpt -v -z --delete rsync.ebi.ac.uk::pub/databases/pdb/data/structures/divided/mmCIF/ {mmcif_path}')
 
     # add timestamp
-    datetime_str = datetime.datetime.now().strftime('%Y-%m-%d|%H:%M:%S')
+    datetime_str = datetime.datetime.now().strftime('%Y%m%d %H:%M:%S')
     history = f'{db_path}/mmCIF_update_time'
     with open(history, 'w') as f:
         f.write(f'{datetime_str}\n')

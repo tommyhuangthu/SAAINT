@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator, MultipleLocator
 
 sns.color_palette('tab10')
 
@@ -87,12 +88,12 @@ def plot_resolution(df):
 
     # create resolution violin plot
     plt.figure(figsize=(2,3))
-    sns.violinplot(data=df_new3, x='Method', y='Resolution', hue='Method', hue_order=['X-ray', 'EM'], saturation=1, linewidth=0.5)
+    sns.violinplot(data=df_new3, x='Method', y='Resolution', hue='Method', hue_order=['X-ray', 'EM'], saturation=1, linewidth=1)
     sns.despine()
     plt.xticks(fontsize=10)
     plt.yticks(fontsize=10)
     plt.xlabel('Method', fontsize=12)
-    plt.ylabel('Resolution ($\AA$)', fontsize=12)
+    plt.ylabel(r'Resolution ($\AA$)', fontsize=12)
     plt.tight_layout()
     plt.savefig('resolution_method.png', dpi=600, transparent=True)
     plt.close()
@@ -101,7 +102,7 @@ def plot_resolution(df):
     plt.figure(figsize=(2,3))
     df_rfac = df_new3[['R_free', 'R_work']]
     df_rfac = df_rfac.melt(var_name='R-factor', value_name='Value')
-    sns.violinplot(data=df_rfac, x='R-factor', y='Value', hue='R-factor', hue_order=['R_free', 'R_work'], saturation=1, linewidth=0.5)
+    sns.violinplot(data=df_rfac, x='R-factor', y='Value', hue='R-factor', hue_order=['R_free', 'R_work'], saturation=1, linewidth=1)
     sns.despine()
     plt.xticks(fontsize=10)
     plt.yticks(fontsize=10)
@@ -209,12 +210,14 @@ def plot_ab_species(df):
 
 
 def plot_ab_type(df):
-    fig, ax1 = plt.subplots(figsize=(12,3))
+    fig, ax1 = plt.subplots(figsize=(13,4))
     sns.countplot(data=df, ax=ax1, x='Ab_type', order=df['Ab_type'].value_counts().index, saturation=1)
     sns.despine()
     ax1.bar_label(ax1.containers[0], fontsize=9)
     ax1.set_ylabel('Count', fontsize=12)
     ax1.set_xlabel('Antibody type', fontsize=12)
+    ax1.yaxis.minorticks_on()
+    ax1.tick_params('y')
     plt.xticks(rotation=30, fontsize=10, ha='right')
     plt.yticks(fontsize=10)
     plt.tight_layout()
@@ -280,14 +283,18 @@ def plot_HL_chain_len(df):
             L_seq_types.append('PDB-seq')
             L_seq_types.append('Filled-seq')
 
-    flierprops=dict(marker='x', markeredgecolor='gray', markersize=3, markeredgewidth=0.5)
+    flierprops=dict(marker='x', markeredgecolor='gray', markersize=5, markeredgewidth=0.5)
     sns.set(rc={'legend.fontsize': 9})
-    sns.set_style('darkgrid')
+    #sns.set_style('darkgrid')
+    sns.set_style('ticks')
     
     df_new = pd.DataFrame({'H_types': H_types, 'H_seq_lens': H_seq_lens, 'Sequence type': H_seq_types})
-    plt.figure(figsize=(8,3))
-    sns.boxplot(data=df_new, x='H_types', y='H_seq_lens', palette='tab10', hue='Sequence type', 
-            hue_order = ['PDB-seq', 'Filled-seq', 'FASTA-seq'], saturation=1, dodge=True, gap=0.15, linewidth=0.5, flierprops=flierprops)
+    fig, ax1 = plt.subplots(figsize=(8,8))
+    ax1.yaxis.minorticks_on()
+    ax1.yaxis.grid(True, linestyle='--')
+    #plt.figure(figsize=(8,8))
+    sns.boxplot(data=df_new, x='H_types', y='H_seq_lens', palette='Accent', hue='Sequence type', 
+            hue_order = ['PDB-seq', 'Filled-seq', 'FASTA-seq'], saturation=1, dodge=True, gap=0.15, linewidth=1, flierprops=flierprops)
     plt.xticks(rotation=30, fontsize=10, ha='right')
     plt.yticks(fontsize=10)
     plt.xlabel('Heavy-chain antibody type', fontsize=12)
@@ -297,9 +304,12 @@ def plot_HL_chain_len(df):
     plt.close()
 
     df_new2 = pd.DataFrame({'L_types': L_types, 'L_seq_lens': L_seq_lens, 'Sequence type': L_seq_types})
-    plt.figure(figsize=(5,3))
-    sns.boxplot(data=df_new2, x='L_types', y='L_seq_lens', palette='tab10', hue='Sequence type', 
-            hue_order = ['PDB-seq', 'Filled-seq', 'FASTA-seq'], saturation=1, dodge=True, gap=0.15, linewidth=0.5, flierprops=flierprops)
+    fig, ax2 = plt.subplots(figsize=(5,8))
+    ax2.yaxis.minorticks_on()
+    ax2.yaxis.grid(True, linestyle='--')
+    #plt.figure(figsize=(5,8))
+    sns.boxplot(data=df_new2, x='L_types', y='L_seq_lens', palette='Accent', hue='Sequence type', 
+            hue_order = ['PDB-seq', 'Filled-seq', 'FASTA-seq'], saturation=1, dodge=True, gap=0.15, linewidth=1, flierprops=flierprops)
     plt.xticks(rotation=30, fontsize=10, ha='right')
     plt.yticks(fontsize=10)
     plt.xlabel('Light-chain antibody type', fontsize=12)
@@ -315,12 +325,17 @@ def plot_HL_inf_res_num(df):
     #counts = df['Ab_type'].value_counts()
     #filter2 = df['Ab_type'].isin(counts[counts>10].index)
     
-    flierprops=dict(marker='x', markeredgecolor='gray', markersize=2, markeredgewidth=0.5)
+    flierprops=dict(marker='x', markeredgecolor='gray', markersize=5, markeredgewidth=0.5)
+    #sns.set_style('darkgrid')
+    sns.set_style('ticks')
     
     df_new = df[filter1]
     df_res = df_new[['Ab_type', 'HL_inf_res_num']]
-    plt.figure(figsize=(6,7))
-    sns.boxplot(data=df_res, x='Ab_type', y='HL_inf_res_num', color='tab:blue', saturation=1, flierprops=flierprops, linewidth=0.5)
+    fig, ax1 = plt.subplots(figsize=(8,8))
+    ax1.yaxis.minorticks_on()
+    ax1.yaxis.grid(True, linestyle='--')
+    #plt.figure(figsize=(6,7))
+    sns.boxplot(data=df_res, x='Ab_type', y='HL_inf_res_num', color='tab:blue', saturation=1, flierprops=flierprops, linewidth=1)
     #sns.despine()
     plt.xticks(rotation=30, fontsize=10, ha='right')
     plt.yticks(fontsize=10)
@@ -356,16 +371,21 @@ def plot_radius(df):
             abtypes.append(L_type)
             radii.append(L_radius)
     
-    flierprops=dict(marker='x', markeredgecolor='gray', markersize=2, markeredgewidth=0.5)
+    flierprops=dict(marker='x', markeredgecolor='gray', markersize=5, markeredgewidth=0.5)
+    #sns.set_style('darkgrid')
+    sns.set_style('ticks')
     
     df_new = pd.DataFrame({'type': abtypes, 'radii': radii})
-    plt.figure(figsize=(2, 2))
-    sns.boxplot(data=df_new, x='type', y='radii', color='tab:blue', saturation=1, dodge=True, gap=0.15, linewidth=0.5, flierprops=flierprops, order=sorted(df_new['type'].unique()))
+    fig, ax1 = plt.subplots(figsize=(2,4))
+    ax1.yaxis.minorticks_on()
+    ax1.yaxis.grid(True, linestyle='--')
+    #plt.figure(figsize=(2, 2))
+    sns.boxplot(data=df_new, x='type', y='radii', color='tab:blue', saturation=1, dodge=True, gap=0.15, linewidth=1, flierprops=flierprops, order=sorted(df_new['type'].unique()))
     #sns.despine()
     plt.xticks(rotation=30, fontsize=10, ha='right')
     plt.yticks(fontsize=10)
     plt.xlabel('Type', fontsize=12)
-    plt.ylabel('Radius ($\AA$)', fontsize=12)
+    plt.ylabel(r'Radius ($\AA$)', fontsize=12)
     plt.tight_layout()
     plt.savefig('radius.png', dpi=600)
     plt.close()
@@ -494,16 +514,43 @@ def plot_ab_ag_inf_res_num(df):
     
     filter1 = df['Ab_ag_inf_res_num'] > 0
     df_new = df[filter1]
-
-    fig, ax1 = plt.subplots(figsize=(3.5,3))
-    ax1 = sns.histplot(data=df_new, x='Ab_ag_inf_res_num', color='tab:blue')
-    sns.despine()
-    ax1.set_ylabel('Count', fontsize=12)
-    ax1.set_xlabel(r'$N_\mathrm{Ab-Ag\ interface\ residues}$', fontsize=12)
+    df_new1 = df_new['Ab_ag_inf_res_num']
+    df_new1_int = df_new1.astype(int)
+    min_val = np.min(df_new1_int)
+    max_val = np.max(df_new1_int)
+    bins = np.arange(min_val - 0.5, max_val + 1.5, 1)
+    fig, ax1 = plt.subplots(figsize=(12,3))
+    plt.hist(df_new1_int, bins=bins, color='tab:blue', edgecolor='black')
+    ax1.spines['right'].set_visible(False)
+    ax1.spines['top'].set_visible(False)
+    plt.ylabel('Count', fontsize=12)
+    plt.xlabel(r'$N_\mathrm{Ab-Ag\ interface\ residues}$', fontsize=12)
+    plt.minorticks_on()
     plt.xticks(fontsize=10)
     plt.yticks(fontsize=10)
     plt.tight_layout()
     plt.savefig('ab_ag_inf_res_num.png', dpi=600, transparent=True)
+    plt.close()
+    
+    filter2 = df['Ab_ag_inf_res_num'] > 100
+    df_new = df[filter2]
+    df_new2 = df_new['Ab_ag_inf_res_num']
+    df_new2_int = df_new2.astype(int)
+    min_val = np.min(df_new2_int)
+    max_val = np.max(df_new2_int)
+    bins = np.arange(min_val - 0.5, max_val + 1.5, 1)
+    fig, ax2 = plt.subplots(figsize=(4,2))
+    plt.hist(df_new2_int, bins=bins, color='tab:orange', edgecolor='black')
+    ax2.spines['right'].set_visible(False)
+    ax2.spines['top'].set_visible(False)
+    plt.ylabel('Count', fontsize=12)
+    plt.xlabel(r'$N_\mathrm{Ab-Ag\ interface\ residues}$', fontsize=12)
+    ax2.yaxis.set_major_locator(MaxNLocator(integer=True))
+    plt.minorticks_on()
+    plt.xticks(fontsize=10)
+    plt.yticks(fontsize=10)
+    plt.tight_layout()
+    plt.savefig('ab_ag_inf_res_num_zoomin.png', dpi=600, transparent=True)
     plt.close()
     return df
 
@@ -516,17 +563,44 @@ def plot_cdr_inf_res_num(df):
     
     filter1 = df['CDR_inf_res_num'] > 0
     df_new = df[filter1]
-
-    fig, ax1 = plt.subplots(figsize=(3.5, 3))
-    ax1 = sns.histplot(data=df_new, x='CDR_inf_res_num', color='tab:blue')
-    sns.despine()
-    ax1.set_ylabel('Count', fontsize=12)
-    ax1.set_xlabel(r'$N_\mathrm{CDR\ residues\ on\ Ab-Ag\ interface}$', fontsize=12)
+    df_new1 = df_new['CDR_inf_res_num']
+    df_new1_int = df_new1.astype(int)
+    min_val = np.min(df_new1_int)
+    max_val = np.max(df_new1_int)
+    bins = np.arange(min_val - 0.5, max_val + 1.5, 1)
+    fig, ax1 = plt.subplots(figsize=(12, 3))
+    plt.hist(df_new1_int, bins=bins, color='tab:blue', edgecolor='black')
+    ax1.spines['right'].set_visible(False)
+    ax1.spines['top'].set_visible(False)
+    plt.ylabel('Count', fontsize=12)
+    plt.xlabel(r'$N_\mathrm{CDR\ residues\ at\ Ab-Ag\ interface}$', fontsize=12)
+    plt.minorticks_on()
     plt.xticks(fontsize=10)
     plt.yticks(fontsize=10)
     plt.tight_layout()
     plt.savefig('cdr_inf_res_num.png', dpi=600, transparent=True)
     plt.close()
+
+    filter2 = df['CDR_inf_res_num'] > 30
+    df_new = df[filter2]
+    df_new2 = df_new['CDR_inf_res_num']
+    df_new2_int = df_new2.astype(int)
+    min_val = np.min(df_new2_int)
+    max_val = np.max(df_new2_int)
+    bins = np.arange(min_val - 0.5, max_val + 1.5, 1)
+    fig, ax2 = plt.subplots(figsize=(4, 2))
+    plt.hist(df_new2_int, bins=bins, color='tab:orange', edgecolor='black')
+    ax2.spines['right'].set_visible(False)
+    ax2.spines['top'].set_visible(False)
+    plt.ylabel('Count', fontsize=12)
+    plt.xlabel(r'$N_\mathrm{CDR\ residues\ at\ Ab-Ag\ interface}$', fontsize=12)
+    plt.minorticks_on()
+    plt.xticks(fontsize=10)
+    plt.yticks(fontsize=10)
+    plt.tight_layout()
+    plt.savefig('cdr_inf_res_num_zoomin.png', dpi=600, transparent=True)
+    plt.close()
+
     return df
 
 def plot_cdr_inf_res_ratio(df):
@@ -535,26 +609,56 @@ def plot_cdr_inf_res_ratio(df):
         ints = [float(x) for x in strs]
         mean_cdr_inf_res_ratio = float(np.mean(np.array(ints)))
         df.loc[i, 'CDR_inf_res_ratio'] = mean_cdr_inf_res_ratio
+    
     filter1 = df['CDR_inf_res_ratio'] > 0
     df_new = df[filter1]
-
-    fig, ax1 = plt.subplots(figsize=(3.5, 3))
-    ax1 = sns.histplot(data=df_new, x='CDR_inf_res_ratio', color='tab:blue')
-    sns.despine()
-    ax1.set_ylabel('Count', fontsize=12)
-    ax1.set_xlabel(r'$R_\mathrm{CDR\ residues\ on\ Ab-Ag\ interface}$', fontsize=12)
+    df_new1 = df_new['CDR_inf_res_ratio']
+    df_new1_float = df_new1.astype(float)
+    min_val = np.min(df_new1_float)
+    max_val = np.max(df_new1_float)
+    bins = np.arange(min_val, max_val+0.01, 0.025)
+    fig, ax1 = plt.subplots(figsize=(12, 3))
+    plt.hist(df_new1_float, bins=bins, color='tab:blue', edgecolor='black')
+    ax1.spines['right'].set_visible(False)
+    ax1.spines['top'].set_visible(False)
+    plt.ylabel('Count', fontsize=12)
+    plt.xlabel(r'$R_\mathrm{CDR\ residues\ at\ Ab-Ag\ interface}$', fontsize=12)
+    plt.minorticks_on()
     plt.xticks(fontsize=10)
     plt.yticks(fontsize=10)
     plt.tight_layout()
     plt.savefig('cdr_inf_res_ratio.png', dpi=600, transparent=True)
     plt.close()
+
+    filter2 = df['CDR_inf_res_ratio'] <= 0.4
+    df_new = df[filter1 & filter2]
+    df_new2 = df_new['CDR_inf_res_ratio']
+    df_new2_float = df_new2.astype(float)
+    min_val = np.min(df_new2_float)
+    max_val = np.max(df_new2_float)
+    bins = np.arange(min_val, max_val+0.01, 0.025)
+    fig, ax2 = plt.subplots(figsize=(4, 2))
+    plt.hist(df_new2_float, bins=bins, color='tab:orange', edgecolor='black')
+    ax2.spines['right'].set_visible(False)
+    ax2.spines['top'].set_visible(False)
+    plt.ylabel('Count', fontsize=12)
+    plt.xlabel(r'$R_\mathrm{CDR\ residues\ at\ Ab-Ag\ interface}$', fontsize=12)
+    plt.minorticks_on()
+    plt.xticks(fontsize=10)
+    plt.yticks(fontsize=10)
+    plt.tight_layout()
+    plt.savefig('cdr_inf_res_ratio_zoomin.png', dpi=600, transparent=True)
+    plt.close()
+
+
+
     return df
 
 def plot_pdb_num(df):
-    df_new = df[['PDB_ID', 'Release_date']].drop_duplicates(ignore_index=True)
+    df_new = df[['PDB_ID', 'Deposit_date']].drop_duplicates(ignore_index=True)
     year_count = dict()
     for i in range(len(df_new['PDB_ID'])):
-        year = df_new.loc[i, 'Release_date'][0:4]
+        year = df_new.loc[i, 'Deposit_date'][0:4]
         if year not in year_count:
             year_count[year] = 1
         else:
@@ -569,20 +673,30 @@ def plot_pdb_num(df):
         counts_acc.append(int(np.sum(np.array(counts))))
     print(f'years: {years}, counts: {counts}, counts_acc: {counts_acc}')
 
-    fig, ax1 = plt.subplots(figsize=(6,4))
-    ax1.bar(years, counts_acc)
-    ax1.set_ylabel('PDB count accumulated', fontsize=12, color='tab:blue')
+    min_year = min(years)
+    max_year = max(years)
+
+    fig, ax1 = plt.subplots(figsize=(18,6))
+    ax1.set_xlim(min_year-0.3, max_year+0.7)
+    ax1.bar(years, counts_acc, color='white', edgecolor='black')
+    ax1.set_ylabel('Cumulative PDB count in SAAINT-DB', fontsize=14, color='black')
     ax1.spines[['right']].set_visible(False)
-    ax1.spines['left'].set_color('tab:blue')
-    ax1.tick_params('y', labelsize=10, colors='tab:blue')
-    ax1.tick_params('x', labelsize=10)
-    ax1.set_xlabel('Year', fontsize=12)
+    #ax1.spines['left'].set_color('tab:blue')
+    ax1.tick_params('y', labelsize=12, colors='black')
+    ax1.yaxis.minorticks_on()
+    import matplotlib.ticker as ticker
+    tick_spacing = 1
+    ax1.xaxis.set_major_locator(ticker.MultipleLocator(tick_spacing))
+    ax1.tick_params('x', labelsize=12, rotation=45)
+    ax1.set_xlabel('Year of PDB deposition', fontsize=14)
     ax2 = ax1.twinx()
     ax2.plot(years, counts, color='tab:orange')
-    ax2.set_ylabel('PDB count per year', fontsize=12, color='tab:orange')
+    ax2.set_ylabel('Yearly PDB count in SAAINT-DB', fontsize=12, color='tab:orange')
     ax2.spines[['left']].set_visible(False)
     ax2.spines['right'].set_color('tab:orange')
-    ax2.tick_params('y', labelsize=10, colors='tab:orange')
+    ax2.tick_params('y', labelsize=12, colors='tab:orange')
+    ax2.yaxis.minorticks_on()
+    ax2.tick_params('y', which='minor', color='tab:orange')
     plt.tight_layout()
     plt.savefig('pdb_num.png', dpi=600, transparent=True)
     plt.close()
@@ -590,24 +704,62 @@ def plot_pdb_num(df):
 
 def plot_affinity(df):
     df_new1 = df[df['Affinity_KD(nM)'] != 'N.A.'].drop_duplicates(ignore_index=True)
-    kds = []
+    kds_all, kds_le6, kds_ge11 = [], [], []
     for i in range(len(df_new1['Affinity_KD(nM)'])):
         kd = df_new1.loc[i, 'Affinity_KD(nM)']
         kd = kd.replace('>', '').replace('<', '').replace('*', '')
-        kds.append(9-math.log10(float(kd)))
-    print(f'num_of_affinity_data: {len(kds)}')
+        val = 9-math.log10(float(kd))
+        kds_all.append(val)
+        if val <= 6: kds_le6.append(val)
+        elif val >= 11: kds_ge11.append(val)
+    print(f'num_of_affinity_data: {len(kds_all)}')
 
-    df_new11 = pd.DataFrame({'pkd': kds})
-    fig, ax1 = plt.subplots(figsize=(3.5,3))
-    ax1 = sns.histplot(data=df_new11, x='pkd', color='tab:blue')
-    sns.despine()
-    ax1.set_ylabel('Count', fontsize=12)
-    ax1.set_xlabel(r'p$K_\mathrm{D}$', fontsize=12)
+    fig, ax1 = plt.subplots(figsize=(12,3))
+    bins=np.arange(4, 14.1, 0.25)
+    plt.hist(kds_all, bins=bins, color='tab:blue', edgecolor='black')
+    ax1.spines['right'].set_visible(False)
+    ax1.spines['top'].set_visible(False)
+    plt.ylabel('Count', fontsize=12)
+    plt.xlabel(r'p$K_\mathrm{D}$', fontsize=12)
+    plt.minorticks_on()
     plt.xticks(fontsize=10)
     plt.yticks(fontsize=10)
     plt.tight_layout()
     plt.savefig('affinity_pkd.png', dpi=600, transparent=True)
     plt.close()
+
+    fig, ax2 = plt.subplots(figsize=(2,2))
+    bins=np.arange(4, 6.1, 0.25)
+    plt.hist(kds_le6, bins=bins, color='tab:orange', edgecolor='black')
+    ax2.spines['right'].set_visible(False)
+    ax2.spines['top'].set_visible(False)
+    plt.ylabel('Count', fontsize=12)
+    plt.xlabel(r'p$K_\mathrm{D}$', fontsize=12)
+    plt.minorticks_on()
+    plt.xticks(fontsize=10)
+    plt.yticks(fontsize=10)
+    plt.tight_layout()
+    plt.savefig('affinity_pkd_le6.png', dpi=600, transparent=True)
+    plt.close()
+
+    fig, ax3 = plt.subplots(figsize=(3,2))
+    bins=np.arange(11, 14.1, 0.25)
+    plt.hist(kds_ge11, bins=bins, color='tab:orange', edgecolor='black')
+    ax3.spines['right'].set_visible(False)
+    ax3.spines['top'].set_visible(False)
+    plt.ylabel('Count', fontsize=12)
+    plt.xlabel(r'p$K_\mathrm{D}$', fontsize=12)
+    plt.minorticks_on()
+    plt.xticks(fontsize=10)
+    plt.yticks(fontsize=10)
+    plt.tight_layout()
+    plt.savefig('affinity_pkd_ge11.png', dpi=600, transparent=True)
+    plt.close()
+
+
+
+
+
 
     df_new2 = df[df['Affinity_method'] != 'N.A.'].drop_duplicates(ignore_index=True)
     method_counts = df_new2['Affinity_method'].value_counts()
@@ -663,23 +815,15 @@ def plot_affinity(df):
     return
 
 
-def count_pdb_num(df):
-    unique_pdbs = []
+def count_entry_num(df):
+    unique_pdbs, data_num = [], 0
     for i in range(len(df['PDB_ID'])):
+        data_num += 1
         pdbid = df.loc[i, 'PDB_ID']
         if pdbid not in unique_pdbs:
             unique_pdbs.append(pdbid)
-    print(f'num_of_unique_pdbs: {len(unique_pdbs)}')
+    print(f'num_of_unique_pdbs: {len(unique_pdbs)}, num_of_data_entries: {data_num}')
     return
-
-
-def count_data_num(df):
-    data_num = 0
-    for i in range(len(df['PDB_ID'])):
-        data_num += 1
-    print(f'num_of_data_entries: {data_num}')
-    return
-
 
 
 def count_num_of_pdbs_with_paired_vhvl(df):
@@ -743,7 +887,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=usage)
     parser.add_argument('saaint_file', type=str, help='Input a saaint database summary file')
     parser.add_argument('-j', '--job', type=str, choices=[
-        '', 'date', 'classification', 'method', 'resolution', 'publication', 'asym_id', 'plot_pdb_num', 'count_pdb_num', 'count_data_num', 
+        '', 'date', 'classification', 'method', 'resolution', 'publication', 'asym_id', 'plot_pdb_num', 'count_entry_num', 
         'ab_spe', 'ab_type', 'HL_inf_res_num', 'HL_chain_len', 'radius',
         'ag_spe', 'ag_type', 'ab_ag_inf_res_num', 'cdr_inf_res_num', 'cdr_inf_res_ratio', 'ag_chain_num', 
         'num_pdbs_with_paired_vhvl', 'num_pdbs_with_ag', 'check_ab_spe', 'plot_all', 
@@ -784,12 +928,9 @@ if __name__ == '__main__':
     elif job == 'plot_pdb_num':
         df = pd.read_excel(saaint_file, index_col=None, keep_default_na=False)
         plot_pdb_num(df)
-    elif job == 'count_pdb_num':
+    elif job == 'count_entry_num':
         df = pd.read_excel(saaint_file, index_col=None, keep_default_na=False)
-        count_pdb_num(df)
-    elif job == 'count_data_num':
-        df = pd.read_excel(saaint_file, index_col=None, keep_default_na=False)
-        count_data_num(df)
+        count_entry_num(df)
     elif job == 'method':
         df = pd.read_excel(saaint_file, index_col=None, keep_default_na=False)
         plot_method(df)

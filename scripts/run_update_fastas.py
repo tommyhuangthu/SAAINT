@@ -92,7 +92,7 @@ if __name__ == '__main__':
     update_pdb_fastas(fasta_path, update_dict)
 
     # add timestamp
-    datetime_str = datetime.datetime.now().strftime('%Y-%m-%d|%H:%M:%S')
+    datetime_str = datetime.datetime.now().strftime('%Y%m%d %H:%M:%S')
     history = f'{db_path}/fasta_update_time'
     with open(history, 'w') as f:
         f.write(f'{datetime_str}\n')

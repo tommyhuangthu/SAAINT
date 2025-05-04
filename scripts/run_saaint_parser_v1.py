@@ -716,7 +716,7 @@ def find_ent_by_chain_id(pdb_entities, chain_id):
     return None, -1
 
 
-def compute_cdr_residues(ent, pdbid, abrsa_pdb):
+def compute_cdr_residues(ent, pdbid, pdb_model, abrsa_pdb):
     for index, chain_id in enumerate(ent.get_chain_ids()):
         if ent.get_chain_type(index) != 'protein' and ent.get_chain_type(index) != 'peptide' and \
                 'heavy' not in ent.get_abrsa_type(index) and 'light' not in ent.get_abrsa_type(index): 
@@ -893,42 +893,41 @@ def get_pdb_entities_from_fasta(pdbid, pdb_fasta_file):
     return pdb_entities
 
 
-def remove_poor_residues_and_chains(structure):
-    for model in structure:
-        residues_to_remove, chains_to_remove = [], []
-        for chain in model:
-            for residue in chain:
-                if residue.id[0] != ' ' or residue.get_resname() == 'UNK':
-                    residues_to_remove.append((chain.id, residue.id))
-                else:
-                    ca_found, p_found, c1p_found = False, False, False
-                    for atom in residue.get_atoms():
-                        if atom.get_name() == 'CA':
-                            ca_found = True
-                        # atoms P and C1' are for DNA or RNA
-                        elif atom.get_name() == 'P':
-                            p_found = True
-                        elif atom.get_name() == "C1'":
-                            c1p_found = True
-                    if ca_found == False and p_found == False and c1p_found == False:
-                        residues_to_remove.append((chain.id, residue.id))
-                # some structures have very large values which will violate the PDB format
-                # reset these values for the sake of saving pdb models for Pulchra and FASPR processing
+def remove_poor_residues_and_chains(model):
+    residues_to_remove, chains_to_remove = [], []
+    for chain in model:
+        for residue in chain:
+            if residue.id[0] != ' ' or residue.get_resname() == 'UNK':
+                residues_to_remove.append((chain.id, residue.id))
+            else:
+                ca_found, p_found, c1p_found = False, False, False
                 for atom in residue.get_atoms():
-                    atom.set_occupancy(1.00)
-                    atom.set_bfactor(0.00)
-                    atom.set_altloc(' ')
-        for rtr in residues_to_remove:
-            model[rtr[0]].detach_child(rtr[1])
-        for chain in model:
-            if len(chain) == 0:
-                chains_to_remove.append(chain.id)
-        for chain in chains_to_remove:
-            model.detach_child(chain)
-    return structure
+                    if atom.get_name() == 'CA':
+                        ca_found = True
+                    # atoms P and C1' are for DNA or RNA
+                    elif atom.get_name() == 'P':
+                        p_found = True
+                    elif atom.get_name() == "C1'":
+                        c1p_found = True
+                if ca_found == False and p_found == False and c1p_found == False:
+                    residues_to_remove.append((chain.id, residue.id))
+            # some structures have very large values which will violate the PDB format
+            # reset these values for the sake of saving pdb models for Pulchra and FASPR processing
+            for atom in residue.get_atoms():
+                atom.set_occupancy(1.00)
+                atom.set_bfactor(0.00)
+                atom.set_altloc(' ')
+    for rtr in residues_to_remove:
+        model[rtr[0]].detach_child(rtr[1])
+    for chain in model:
+        if len(chain) == 0:
+            chains_to_remove.append(chain.id)
+    for chain in chains_to_remove:
+        model.detach_child(chain)
+    return model
 
 
-def get_structure_from_cif(pdb_cif_path, pdbid):
+def get_pdb_model_from_cif(pdb_cif_path, pdbid):
     auth_chains = True
     if asym_id_type != 'auth_asym_id':
         auth_chains = False
@@ -936,13 +935,23 @@ def get_structure_from_cif(pdb_cif_path, pdbid):
     if os.path.exists(f'{pdb_cif_path}/{pdbid}.cif'):
         with open(f'{pdb_cif_path}/{pdbid}.cif', 'r') as f:
             structure = parser.get_structure(pdbid, f)
-            structure = remove_poor_residues_and_chains(structure)
-            return structure
+            model = structure[0]
+            model = remove_poor_residues_and_chains(model)
+            return model
     elif os.path.exists(f'{pdb_cif_path}/{pdbid[1:3]}/{pdbid}.cif.gz'):
         with gzip.open(f'{pdb_cif_path}/{pdbid[1:3]}/{pdbid}.cif.gz', 'rt') as f:
             structure = parser.get_structure(pdbid, f)
-            structure = remove_poor_residues_and_chains(structure)
-            return structure
+            model = structure[0]
+            model = remove_poor_residues_and_chains(model)
+            return model
+
+
+def get_pdb_model_from_pdb(pdbid, pdb_file):
+    parser = PDB.PDBParser()
+    with open(pdb_file, 'r') as f:
+        structure = parser.get_structure(pdbid, f)
+        model = structure[0]
+        return model
 
 
 def parse_abrsa_out(abrsa_out):
@@ -1112,7 +1121,7 @@ def align_pdb_seq_to_fas_seq(pdb_seq, fas_seq):
 
 
 
-def generate_ab_info(pdb_entities, chain_mapping, H_chain_id, L_chain_id, HL_inf_res_num, ab_type):
+def write_ab_info(f, pdb_entities, chain_mapping, H_chain_id, L_chain_id, HL_inf_res_num, ab_type):
     if H_chain_id != '' and L_chain_id != '':
         ent_H, index_H = find_ent_by_chain_id(pdb_entities, H_chain_id)
         ent_L, index_L = find_ent_by_chain_id(pdb_entities, L_chain_id)
@@ -1125,10 +1134,10 @@ def generate_ab_info(pdb_entities, chain_mapping, H_chain_id, L_chain_id, HL_inf
         H_fas_seq, L_fas_seq = ent_H.get_fas_seq(), ent_L.get_fas_seq()
         H_fas_seq_len, L_fas_seq_len = ent_H.get_fas_seq_len(), ent_L.get_fas_seq_len()
         H_radius, L_radius = ent_H.get_mean_radius(index_H), ent_L.get_mean_radius(index_L)
-        return '\t'.join([ab_type, sgs_H[0], sgs_L[1],
+        f.write('\t'.join([ab_type, sgs_H[0], sgs_L[1],
             '"'+chain_mapping[H_chain_id]+'"', '"'+chain_mapping[L_chain_id]+'"', H_fas_seq, L_fas_seq, H_filled_pdb_seq, L_filled_pdb_seq, str(H_radius), str(L_radius), 
             str(H_fas_seq_len), str(L_fas_seq_len), str(H_pdb_seq_len), str(L_pdb_seq_len), str(H_filled_seq_len), str(L_filled_seq_len), str(HL_inf_res_num), 
-            '"'+H_chain_name+'"', '"'+L_chain_name+'"', '"'+H_species+'"', '"'+L_species+'"', ''])
+            '"'+H_chain_name+'"', '"'+L_chain_name+'"', '"'+H_species+'"', '"'+L_species+'"', '']))
             
     elif H_chain_id != '' and L_chain_id == '':
         ent_H, index_H = find_ent_by_chain_id(pdb_entities, H_chain_id)
@@ -1141,10 +1150,10 @@ def generate_ab_info(pdb_entities, chain_mapping, H_chain_id, L_chain_id, HL_inf
         H_fas_seq = ent_H.get_fas_seq()
         H_fas_seq_len = ent_H.get_fas_seq_len()
         H_radius = ent_H.get_mean_radius(index_H)
-        return '\t'.join([ab_type, sgs_H[0], sgs_H[1],
+        f.write('\t'.join([ab_type, sgs_H[0], sgs_H[1],
             '"'+chain_mapping[H_chain_id]+'"', 'N.A.', H_fas_seq, 'N.A.', H_filled_pdb_seq, 'N.A.', str(H_radius), '0.00', 
             str(H_fas_seq_len), '0', str(H_pdb_seq_len), '0', str(H_filled_seq_len), '0', str(HL_inf_res_num),
-            '"'+H_chain_name+'"', 'N.A.', '"'+H_species+'"', 'N.A.', ''])
+            '"'+H_chain_name+'"', 'N.A.', '"'+H_species+'"', 'N.A.', '']))
             
     elif H_chain_id == '' and L_chain_id != '':
         ent_L, index_L = find_ent_by_chain_id(pdb_entities, L_chain_id)
@@ -1157,13 +1166,14 @@ def generate_ab_info(pdb_entities, chain_mapping, H_chain_id, L_chain_id, HL_inf
         L_fas_seq = ent_L.get_fas_seq()
         L_fas_seq_len = ent_L.get_fas_seq_len()
         L_radius = ent_L.get_mean_radius(index_L)
-        return '\t'.join([ab_type, sgs_L[0], sgs_L[1], 
+        f.write('\t'.join([ab_type, sgs_L[0], sgs_L[1], 
             'N.A.', '"'+chain_mapping[L_chain_id]+'"', 'N.A.', L_fas_seq, 'N.A.', L_filled_pdb_seq, '0.00', str(L_radius), 
             '0', str(L_fas_seq_len), '0', str(L_pdb_seq_len), '0', str(L_filled_seq_len), str(HL_inf_res_num),
-            'N.A.', '"'+L_chain_name+'"', 'N.A.', '"'+L_species+'"', ''])
+            'N.A.', '"'+L_chain_name+'"', 'N.A.', '"'+L_species+'"', '']))
+    return
 
 
-def generate_ag_info(pdb_entities, chain_mapping, paired_ags):
+def write_ag_info(f, pdb_entities, chain_mapping, paired_ags):
     chain_mol_str, chain_spe_str, chain_type_str, chain_id_str = 'N.A.', 'N.A.', 'N.A.', 'N.A.'
     if paired_ags[0][0]:
         chain_id_str = ';'.join([chain_mapping[paired_ags[i][0]] for i in range(0, len(paired_ags))])
@@ -1182,15 +1192,14 @@ def generate_ag_info(pdb_entities, chain_mapping, paired_ags):
     cdr_inf_res_ratio_str = ';'.join([str(paired_ags[i][3]) for i in range(0, len(paired_ags))])
 
     if chain_id_str == 'N.A.':
-        return '\t'.join([chain_id_str, chain_type_str, chain_mol_str, chain_spe_str, 
-            ab_ag_inf_res_num_str, cdr_inf_res_num_str, cdr_inf_res_ratio_str+'\n'])
+        f.write('\t'.join([chain_id_str, chain_type_str, chain_mol_str, chain_spe_str, 
+            ab_ag_inf_res_num_str, cdr_inf_res_num_str, cdr_inf_res_ratio_str+'\n']))
     else:
-        return '\t'.join(['"'+chain_id_str+'"', '"'+chain_type_str+'"', '"'+chain_mol_str+'"', '"'+chain_spe_str+'"', 
-            ab_ag_inf_res_num_str, cdr_inf_res_num_str, cdr_inf_res_ratio_str+'\n'])
+        f.write('\t'.join(['"'+chain_id_str+'"', '"'+chain_type_str+'"', '"'+chain_mol_str+'"', '"'+chain_spe_str+'"', 
+            ab_ag_inf_res_num_str, cdr_inf_res_num_str, cdr_inf_res_ratio_str+'\n']))
+    return
 
-
-def generate_paired_ab_ag_ids(paired_ab_ags, chain_mapping, rep_ndx, model_index):
-    chain_pair_str = str(model_index)+'\t'
+def write_paired_ab_ag_ids(f, paired_ab_ags, chain_mapping, rep_ndx):
     for i, paired_ab_ag in enumerate(paired_ab_ags):
         paired_HL, paired_ags = paired_ab_ag[0], paired_ab_ag[1]
         H_chain_id, L_chain_id, HL_inf_res_num = paired_HL[0], paired_HL[1], paired_HL[2]
@@ -1204,33 +1213,28 @@ def generate_paired_ab_ag_ids(paired_ab_ags, chain_mapping, rep_ndx, model_index
             ag_chain_id_str = ';'.join([chain_mapping[paired_ags[i][0]] for i in range(0, len(paired_ags))])
         if i==0:
             if i==rep_ndx:
-                chain_pair_str += ','.join(['rep', H_chain_id_str, L_chain_id_str, ag_chain_id_str])
+                f.write(','.join(['rep', H_chain_id_str, L_chain_id_str, ag_chain_id_str]))
             else:
-                chain_pair_str += ','.join(['nonrep', H_chain_id_str, L_chain_id_str, ag_chain_id_str])
+                f.write(','.join(['nonrep', H_chain_id_str, L_chain_id_str, ag_chain_id_str]))
         else:
             if i==rep_ndx:
-                chain_pair_str += ','.join(['\t'+'rep', H_chain_id_str, L_chain_id_str, ag_chain_id_str])
+                f.write(','.join(['\t'+'rep', H_chain_id_str, L_chain_id_str, ag_chain_id_str]))
             else:
-                chain_pair_str +=  ','.join(['\t'+'nonrep', H_chain_id_str, L_chain_id_str, ag_chain_id_str])
-    chain_pair_str += '\n'
-    return chain_pair_str
+                f.write(','.join(['\t'+'nonrep', H_chain_id_str, L_chain_id_str, ag_chain_id_str]))
+    f.write('\n')
+    return
 
 
 
-def generate_pdb_info(pdbid, mut_status, class_, deposit_date, release_date, method, resolution, r_free, r_work, pmid, doi, title, model_index, asym_id_type):
-    return '\t'.join(['"'+pdbid+'"', '"'+title+'"', mut_status, '"'+class_+'"', deposit_date, release_date, 
-        '"'+method+'"', resolution, r_free, r_work, pmid, doi, str(model_index), asym_id_type, ''])
+
+def write_pdb_info(f, pdbid, mut_status, class_, deposit_date, release_date, method, resolution, r_free, r_work, pmid, doi, title, asym_id_type):
+    f.write('\t'.join(['"'+pdbid+'"', '"'+title+'"', mut_status, '"'+class_+'"', deposit_date, release_date, 
+        '"'+method+'"', resolution, r_free, r_work, pmid, doi, asym_id_type, '']))
+    return
 
 
-#def clean_files():
-#    os.system(f'rm {pdbid}*.fasta {pdbid}*.abrsa* {pdbid}*.abalign {pdbid}*.msa* {pdbid}*.vgene* {pdbid}*.unidesign {pdbid}*.tmalign 2>/dev/null')
-#
-
-def clean_files_except_pdb_model(pdbid_model):
-    os.system(f'rm {pdbid_model}_*.pdb {pdbid}*.fasta {pdbid}*.abrsa* {pdbid}*.abalign {pdbid}*.msa* {pdbid}*.vgene* {pdbid}*.unidesign {pdbid}*.tmalign 2>/dev/null')
-
-def clean_all_files(pdbid_model):
-    os.system(f'rm {pdbid_model}*.pdb {pdbid}*.fasta {pdbid}*.abrsa* {pdbid}*.abalign {pdbid}*.msa* {pdbid}*.vgene* {pdbid}*.unidesign {pdbid}*.tmalign 2>/dev/null')
+def clean_all_temp_files():
+    os.system(f'rm {pdbid}*.pdb {pdbid}*.fasta {pdbid}*.abrsa* {pdbid}*.abalign {pdbid}*.msa* {pdbid}*.vgene* {pdbid}*.unidesign {pdbid}*.tmalign 2>/dev/null')
 
 
 #################################
@@ -1260,13 +1264,6 @@ def parse_ab_ag_interaction(pdbid, pdb_fasta_path, pdb_cif_path):
             f.write(f'>{chain_id}\n{ent.get_fas_seq()}\n')
         tmp_abrsa_out = f'{pdbid}_{chain_id}.abrsa'
         abrsa_type, ab_res = run_abrsa(abrsa, tmp_fasta, tmp_abrsa_out)
-        
-        # avoid T-cell receptor
-        if 'tcr' in ent.get_name() and \
-                not (string_contains_substr(ent.get_name(), ['fab', 'heavy', 'mab', 'antibo', 'immunoglo', 'igh'])
-                        or string_contains_substr(ent.get_name(), ['nanobo', 'vhh', 'nano-bo'])):
-            abrsa_type = 'antigen'
-        
         ent.set_fas_ab_res(ab_res)
         all_chain_abrsa_types.append(abrsa_type)
         total_chain_num += len(ent.get_chain_ids())
@@ -1277,7 +1274,7 @@ def parse_ab_ag_interaction(pdbid, pdb_fasta_path, pdb_cif_path):
             print(f'chain_ids: {ent.get_chain_ids()}, fas_seq: {ent.get_fas_seq()}, fas_seq_len: {len(ent.get_fas_seq())}, abrsa_type (by fasta): {abrsa_type}')
     
     if not ('heavy' in all_chain_abrsa_types or 'heavy_light' in all_chain_abrsa_types or 'light' in all_chain_abrsa_types):
-        clean_all_files()
+        clean_all_temp_files()
         print(f'done parsing (no ab chain found in {pdbid})')
         exit(0)
 
@@ -1286,26 +1283,25 @@ def parse_ab_ag_interaction(pdbid, pdb_fasta_path, pdb_cif_path):
     for char in chars_to_be_removed:
         single_letters.remove(char)
     if total_chain_num >= len(single_letters):
-        clean_all_files()
+        clean_all_temp_files()
         print(f'skip parsing (too many, {total_chain_num}) chains in the structure')
         exit(0)
     
-    # create structure from the official pdbid.cif file
-    structure = get_structure_from_cif(pdb_cif_path, pdbid)
-    
+    # create pdb_model from the official pdbid.cif file
+    pdb_model = get_pdb_model_from_cif(pdb_cif_path, pdbid)
+
     # create one-to-one mapping for chain ids with >=2 letters
-    model = structure[0]
-    model_chain_ids = []
-    for chain in model: 
-        model_chain_ids.append(chain.get_id())
+    pdb_model_chain_ids = []
+    for chain in pdb_model: 
+        pdb_model_chain_ids.append(chain.get_id())
 
     chain_mapping = dict()
-    for id_ in model_chain_ids:
+    for id_ in pdb_model_chain_ids:
         # for single-letter chain, map it to itself
         if len(id_) == 1:
             chain_mapping[id_] = id_
             single_letters.remove(id_)
-    for id_ in model_chain_ids:
+    for id_ in pdb_model_chain_ids:
         # for chain with >=2 letters, map it to one of the remaining single letters in the single_letters list
         if len(id_) > 1:
             if len(single_letters) > 0:
@@ -1316,7 +1312,7 @@ def parse_ab_ag_interaction(pdbid, pdb_fasta_path, pdb_cif_path):
     # update pdb_entities and do chain name mapping
     new_entities = []
     for ent in pdb_entities:
-        if ent.get_chain_id(0) in model_chain_ids:
+        if ent.get_chain_id(0) in pdb_model_chain_ids:
             new_ids = ent.get_chain_ids()
             for i, new_id in enumerate(new_ids):
                 new_ids[i] = chain_mapping[new_id]
@@ -1324,222 +1320,193 @@ def parse_ab_ag_interaction(pdbid, pdb_fasta_path, pdb_cif_path):
             new_entities.append(ent)
     pdb_entities = new_entities
 
-    # change chain id in model correspondingly
-    for chain in model:
+    # change chain id in pdb_model correspondingly
+    for chain in pdb_model:
         if len(chain.get_id())>1:
             temp_id = chain.get_id()
             chain.id = chain_mapping[temp_id]
             chain_mapping[chain.id] = temp_id
 
-    saaint_lines, saaint_rep_lines, chain_pair_strs = [], [], []
-    for model in structure:
-        pdbid_model = f'{pdbid}_model_{model.id}'
-        # run Pulchra and FASPR to rebuild the PDB entity
-        io = PDB.PDBIO()
-        io.set_structure(model)
-        for ent in pdb_entities:
-            for index, chain_id in enumerate(ent.get_chain_ids()):
-                select_chains = [chain_id]
-                chain_type = determine_chain_type_by_pdb_content(model, chain_id)
-                ent.set_chain_type(index, chain_type)
-                if chain_type == 'protein' or chain_type == 'peptide': 
-                    tmp_pdb = f'{pdbid_model}_prot_{chain_id}.pdb'
-                    io.save(tmp_pdb, select=SelectChains(select_chains))
-                    # temporarily reindex from 1
-                    reindex_pdb(tmp_pdb, start_index=1)
-                    run_pulchra(pulchra, tmp_pdb)
-                    reformat_pulchra_rebuilt_pdb(tmp_pdb, chain_id)
-                    # extract fasta sequence for each protein chain in the structure
-                    tmp_fasta = f'{pdbid_model}_prot_{chain_id}.fasta'
-                    pdb_to_fasta(tmp_pdb, tmp_fasta)
-                    headers, seq_dict = read_fasta(tmp_fasta)
-                    pdb_seq = seq_dict[headers[0]]
-                    pdb_res_pos = align_pdb_seq_to_fas_seq(pdb_seq, ent.get_fas_seq())
-                    # reindex according to alignment to fas-seq
-                    reindex_pdb_by_list(tmp_pdb, pdb_res_pos)
-                    start, end = pdb_res_pos[0], pdb_res_pos[-1]
-                    filled_pdb_seq = ent.get_fas_seq()[start-1:end]
-                    ent.set_real_pdb_seq(index, pdb_seq)
-                    ent.set_filled_pdb_seq(index, filled_pdb_seq)
+    # run Pulchra and FASPR to rebuild the PDB entity
+    io = PDB.PDBIO()
+    io.set_structure(pdb_model)
+    for ent in pdb_entities:
+        for index, chain_id in enumerate(ent.get_chain_ids()):
+            select_chains = [chain_id]
+            chain_type = determine_chain_type_by_pdb_content(pdb_model, chain_id)
+            ent.set_chain_type(index, chain_type)
+            if chain_type == 'protein' or chain_type == 'peptide': 
+                tmp_pdb = f'{pdbid}_prot_{chain_id}.pdb'
+                io.save(tmp_pdb, select=SelectChains(select_chains))
+                # temporarily reindex from 1
+                reindex_pdb(tmp_pdb, start_index=1)
+                run_pulchra(pulchra, tmp_pdb)
+                reformat_pulchra_rebuilt_pdb(tmp_pdb, chain_id)
+                # extract fasta sequence for each protein chain in the structure
+                tmp_fasta = f'{pdbid}_prot_{chain_id}.fasta'
+                pdb_to_fasta(tmp_pdb, tmp_fasta)
+                headers, seq_dict = read_fasta(tmp_fasta)
+                pdb_seq = seq_dict[headers[0]]
+                pdb_res_pos = align_pdb_seq_to_fas_seq(pdb_seq, ent.get_fas_seq())
+                # reindex according to alignment to fas-seq
+                reindex_pdb_by_list(tmp_pdb, pdb_res_pos)
+                start, end = pdb_res_pos[0], pdb_res_pos[-1]
+                filled_pdb_seq = ent.get_fas_seq()[start-1:end]
+                ent.set_real_pdb_seq(index, pdb_seq)
+                ent.set_filled_pdb_seq(index, filled_pdb_seq)
 
-                    # set short filled_pdb_seq's chain type as peptide
-                    if len(filled_pdb_seq) < max_len_pep:
-                        ent.set_chain_type(index, 'peptide')
+                # set short filled_pdb_seq's chain type as peptide
+                if len(filled_pdb_seq) < max_len_pep:
+                    ent.set_chain_type(index, 'peptide')
                 
-                    # create filled-seq fasta
-                    tmp_fasta = f'{pdbid_model}_pdb_{chain_id}.fasta'
-                    with open(tmp_fasta, 'w') as f:
-                        f.write(f'>{chain_id}\n{filled_pdb_seq}\n')
-                    tmp_abrsa_out = f'{pdbid_model}_{chain_id}.abrsa'
-                    # run AbRSA to determine if the pdb seq has VH, VL, or their combination
-                    abrsa_type, ab_res = run_abrsa(abrsa, tmp_fasta, tmp_abrsa_out)
+                # create pdb fasta seq
+                tmp_fasta = f'{pdbid}_pdb_{chain_id}.fasta'
+                with open(tmp_fasta, 'w') as f:
+                    f.write(f'>{chain_id}\n{filled_pdb_seq}\n')
+                tmp_abrsa_out = f'{pdbid}_{chain_id}.abrsa'
+                # run AbRSA to determine if the pdb seq has VH, VL, or their combination
+                abrsa_type, ab_res = run_abrsa(abrsa, tmp_fasta, tmp_abrsa_out)
 
-                    # avoid T-cell receptor
-                    if 'tcr' in ent.get_name() and \
-                            not (string_contains_substr(ent.get_name(), ['fab', 'heavy', 'mab', 'antibo', 'immunoglo', 'igh'])
-                                or string_contains_substr(ent.get_name(), ['nanobo', 'vhh', 'nano-bo'])):
-                        abrsa_type = 'antigen'
-
-                    # re-determine the ab/ag type for chain entity when possible
-                    if abrsa_type == 'heavy_light':
-                        tmp_H_id, tmp_L_id = chain_id + 'H', chain_id + 'L'
-                        ent.set_vgene_subgroup(index, ['N.A.', 'N.A.'])
-                        ent.set_abrsa_type(index, 'heavy_light')
-                        # calculate mean radius of the chain
-                        mean_radius = calculate_mean_radius(tmp_pdb)
-                        ent.set_mean_radius(index, mean_radius)
-                    elif abrsa_type == 'heavy':
-                        subgroup_H = run_abalign(abalign, tmp_fasta, pdbid, chain_id, chain_type='heavy')
-                        ent.set_vgene_subgroup(index, [subgroup_H, 'N.A.'])
-                        ent.set_abrsa_type(index, 'heavy')
-                        tmalign_out = f'{pdbid_model}_{chain_id}.tmalign'
-                        tmscore = run_tmalign(tmalign, tmp_pdb, struct_ref_vh, tmalign_out)
-                        if tmscore < min_tmscore_ab_domain and ent.get_real_pdb_len(index) > min_len_ab_chain:
-                            ent.set_abrsa_type(index, 'antigen')
-                        if verbose:
-                            print(f'tmscore between chain {chain_id} and struct_ref_vh ({struct_ref_vh}): {tmscore}')
-                        # calculate mean radius of the chain
-                        mean_radius = calculate_mean_radius(tmp_pdb)
-                        ent.set_mean_radius(index, mean_radius)
-                    elif abrsa_type == 'light':
-                        subgroup_L = run_abalign(abalign, tmp_fasta, pdbid, chain_id, chain_type='light')
-                        ent.set_vgene_subgroup(index, ['N.A.', subgroup_L])
-                        ent.set_abrsa_type(index, 'light')
-                        tmalign_out = f'{pdbid_model}_{chain_id}.tmalign'
-                        tmscore = run_tmalign(tmalign, tmp_pdb, struct_ref_vl, tmalign_out)
-                        if tmscore < min_tmscore_ab_domain and ent.get_real_pdb_len(index) > min_len_ab_chain:
-                            ent.set_abrsa_type(index, 'antigen')
-                        if verbose:
-                            print(f'tmscore between chain {chain_id} and struct_ref_vl ({struct_ref_vl}): {tmscore}')
-                        # calculate mean radius of the chain
-                        mean_radius = calculate_mean_radius(tmp_pdb)
-                        ent.set_mean_radius(index, mean_radius)
-                    else:
-                        if ent.get_abrsa_type(index) == 'N.A.':
-                            ent.set_abrsa_type(index, 'antigen')
-                        else: # the sequence was previously determined as an ab chain based on fas-seq
-                            pdb_ab_res = list(set(pdb_res_pos) & set(ent.get_fas_ab_res()))
-                            pdb_ab_res.sort()
-                            pdb_ab_res_num, pdb_ab_res_ratio = len(pdb_ab_res), len(pdb_ab_res)/len(pdb_res_pos)
-                            if verbose:
-                                print(f'chain_id: {chain_id}, pdb_ab_res_num: {pdb_ab_res_num}, pdb_ab_res_ratio: {pdb_ab_res_ratio}')
-                            if pdb_ab_res_num < 5 or pdb_ab_res_ratio < 0.2:
-                                ent.set_abrsa_type(index, 'antigen')
-                            # calculate mean radius of the chain
-                            mean_radius = calculate_mean_radius(tmp_pdb)
-                            ent.set_mean_radius(index, mean_radius)
-
-                        ent.set_vgene_subgroup(index, ['N.A.', 'N.A.'])
-
+                # re-determine the ab/ag type for chain entity when possible
+                if abrsa_type == 'heavy_light':
+                    tmp_H_id, tmp_L_id = chain_id + 'H', chain_id + 'L'
+                    ent.set_vgene_subgroup(index, ['N.A.', 'N.A.'])
+                    ent.set_abrsa_type(index, 'heavy_light')
+                    # calculate mean radius of the chain
+                    mean_radius = calculate_mean_radius(tmp_pdb)
+                    ent.set_mean_radius(index, mean_radius)
+                elif abrsa_type == 'heavy':
+                    subgroup_H = run_abalign(abalign, tmp_fasta, pdbid, chain_id, chain_type='heavy')
+                    ent.set_vgene_subgroup(index, [subgroup_H, 'N.A.'])
+                    ent.set_abrsa_type(index, 'heavy')
+                    tmalign_out = f'{pdbid}_{chain_id}.tmalign'
+                    tmscore = run_tmalign(tmalign, tmp_pdb, struct_ref_vh, tmalign_out)
+                    if tmscore < min_tmscore_ab_domain and ent.get_real_pdb_len(index) > min_len_ab_chain:
+                        ent.set_abrsa_type(index, 'antigen')
                     if verbose:
-                        print(', '.join([f'protein chain_id: {chain_id}', f'filled_pdb_seq: {ent.get_filled_pdb_seq(index)}', f'filled_pdb_len: {ent.get_filled_pdb_len(index)}',
-                            f'real_pdb_len: {ent.get_real_pdb_len(index)}', f'abrsa_type (by filled_pdb_seq): {abrsa_type}', f'mean_radius: {ent.get_mean_radius(index)}']))
-
+                        print(f'tmscore between chain {chain_id} and struct_ref_vh ({struct_ref_vh}): {tmscore}')
+                    # calculate mean radius of the chain
+                    mean_radius = calculate_mean_radius(tmp_pdb)
+                    ent.set_mean_radius(index, mean_radius)
+                elif abrsa_type == 'light':
+                    subgroup_L = run_abalign(abalign, tmp_fasta, pdbid, chain_id, chain_type='light')
+                    ent.set_vgene_subgroup(index, ['N.A.', subgroup_L])
+                    ent.set_abrsa_type(index, 'light')
+                    tmalign_out = f'{pdbid}_{chain_id}.tmalign'
+                    tmscore = run_tmalign(tmalign, tmp_pdb, struct_ref_vl, tmalign_out)
+                    if tmscore < min_tmscore_ab_domain and ent.get_real_pdb_len(index) > min_len_ab_chain:
+                        ent.set_abrsa_type(index, 'antigen')
+                    if verbose:
+                        print(f'tmscore between chain {chain_id} and struct_ref_vl ({struct_ref_vl}): {tmscore}')
+                    # calculate mean radius of the chain
+                    mean_radius = calculate_mean_radius(tmp_pdb)
+                    ent.set_mean_radius(index, mean_radius)
                 else:
-                    tmp_pdb = f'{pdbid_model}_nonprot_{chain_id}.pdb'
-                    io.save(tmp_pdb, select=SelectChains(select_chains))
-                    reindex_pdb(tmp_pdb, start_index=1)
-                    ent.set_real_pdb_seq(index, ent.get_fas_seq())
-                    ent.set_filled_pdb_seq(index, ent.get_fas_seq())
-                    abrsa_type = 'antigen'
-                    ent.set_abrsa_type(index, 'antigen')
+                    if ent.get_abrsa_type(index) == 'N.A.':
+                        ent.set_abrsa_type(index, 'antigen')
+                    else: # the sequence was previously determined as an ab chain based on fas-seq
+                        pdb_ab_res = list(set(pdb_res_pos) & set(ent.get_fas_ab_res()))
+                        pdb_ab_res.sort()
+                        pdb_ab_res_num, pdb_ab_res_ratio = len(pdb_ab_res), len(pdb_ab_res)/len(pdb_res_pos)
+                        if verbose:
+                            print(f'chain_id: {chain_id}, pdb_ab_res_num: {pdb_ab_res_num}, pdb_ab_res_ratio: {pdb_ab_res_ratio}')
+                        if pdb_ab_res_num < 5 or pdb_ab_res_ratio < 0.2:
+                            ent.set_abrsa_type(index, 'antigen')
+                        # calculate mean radius of the chain
+                        mean_radius = calculate_mean_radius(tmp_pdb)
+                        ent.set_mean_radius(index, mean_radius)
 
-        prot_chains = glob.glob(f'{pdbid_model}_prot_*.pdb')
-        if prot_chains:
-            # FASPR can only deal with protein chains, ignoring non-protein chains
-            os.system(f'cat {pdbid_model}_prot_*.pdb > {pdbid_model}_prot.pdb 2>/dev/null')
-            run_faspr_repack_pdb(faspr, f'{pdbid_model}_prot.pdb')
+                    ent.set_vgene_subgroup(index, ['N.A.', 'N.A.'])
+
+                if verbose:
+                    print(f'protein chain_id: {chain_id}, filled_pdb_seq: {ent.get_filled_pdb_seq(index)}, filled_pdb_len: {ent.get_filled_pdb_len(index)}, real_pdb_len: {ent.get_real_pdb_len(index)}, abrsa_type (by filled_pdb_seq): {abrsa_type}, mean_radius: {ent.get_mean_radius(index)}')
+
+            else:
+                tmp_pdb = f'{pdbid}_nonprot_{chain_id}.pdb'
+                io.save(tmp_pdb, select=SelectChains(select_chains))
+                reindex_pdb(tmp_pdb, start_index=1)
+                ent.set_real_pdb_seq(index, ent.get_fas_seq())
+                ent.set_filled_pdb_seq(index, ent.get_fas_seq())
+                abrsa_type = 'antigen'
+                ent.set_abrsa_type(index, 'antigen')
+
+    prot_chains = glob.glob(f'{pdbid}_prot_*.pdb')
+    if prot_chains:
+        # FASPR can only deal with protein chains, ignoring non-protein chains
+        os.system(f'cat {pdbid}_prot_*.pdb > {pdbid}_prot.pdb 2>/dev/null')
+        run_faspr_repack_pdb(faspr, f'{pdbid}_prot.pdb')
         
-            os.system(f'cat {pdbid_model}_prot.pdb {pdbid_model}_nonprot_*.pdb > {pdbid_model}.pdb 2>/dev/null')
-        else:
-            clean_all_files()
-            print(f'done parsing (no protein chain found in {pdbid_model}.pdb)')
-            exit(0)
+        os.system(f'cat {pdbid}_prot.pdb {pdbid}_nonprot_*.pdb > {pdbid}.pdb 2>/dev/null')
+    else:
+        clean_all_temp_files()
+        print(f'done parsing (no protein chain found in {pdbid})')
+        exit(0)
 
-        # compute CDR residues using AbRSA_pdb based on structure
-        for ent in pdb_entities:
-            compute_cdr_residues(ent, pdbid_model, abrsa_pdb)
+    # compute CDR residues using AbRSA_pdb based on structure
+    for ent in pdb_entities:
+        compute_cdr_residues(ent, pdbid, pdb_model, abrsa_pdb)
 
-        all_paired_HLs = build_all_ab_chain_pairs(pdbid_model, unidesign, pdb_entities)
+    all_paired_HLs = build_all_ab_chain_pairs(pdbid, unidesign, pdb_entities)
 
-        if all_paired_HLs:
-            mut_status, class_, deposit_date, release_date, method, resolution, r_free, r_work, pmid, doi, title = fetch_pdb_web_info(pdb_fasta_path, pdbid)
-            update_HL_ab_type(all_paired_HLs, pdb_entities, pdbid, title)
+    if all_paired_HLs:
+        mut_status, class_, deposit_date, release_date, method, resolution, r_free, r_work, pmid, doi, title = fetch_pdb_web_info(pdb_fasta_path, pdbid)
+        update_HL_ab_type(all_paired_HLs, pdb_entities, pdbid, title)
     
-        if verbose:
-            print(f'all_paired_HLs: {all_paired_HLs}')
+    if verbose:
+        print(f'all_paired_HLs: {all_paired_HLs}')
     
-        # pair Ab chains with Ag chains
-        all_paired_ab_ags = []
-        for paired_HLs in all_paired_HLs:
-            build_ab_ag_pairs(unidesign, pdbid_model, paired_HLs, pdb_entities, all_paired_ab_ags)
-        if verbose:
-            print('all_paired_ab_ags:', all_paired_ab_ags)
+    # pair Ab chains with Ag chains
+    all_paired_ab_ags = []
+    for paired_HLs in all_paired_HLs:
+        build_ab_ag_pairs(unidesign, pdbid, paired_HLs, pdb_entities, all_paired_ab_ags)
+    if verbose:
+        print('all_paired_ab_ags:', all_paired_ab_ags)
 
-        # output paired Ab-Ag interactions or Ab info
-        if all_paired_ab_ags:
-            if verbose:
-                print(', '.join([f'pdbid: {pdbid}', f'mutation(s): {mut_status}', f'classification: {class_}', f'deposit_date: {deposit_date}', f'release_date: {release_date}',
-                    f'method: {method}', f'resolution: {resolution}', f'r_free: {r_free}', f'r_work: {r_work}', f'pmid: {pmid}', f'doi: {doi}']))
-
-            l2code = pdbid[1:3]
-            if not os.path.exists(l2code): os.mkdir(l2code)
-            for paired_ab_ags in all_paired_ab_ags:
-                # find and record rep AAIs
-                rep_ndx = find_representative_ab_ag_pair_index(paired_ab_ags, pdb_entities)
-                rep_HL, rep_ags = paired_ab_ags[rep_ndx][0], paired_ab_ags[rep_ndx][1]
-                H_chain_id, L_chain_id, HL_inf_res_num, ab_type = rep_HL[0], rep_HL[1], rep_HL[2], rep_HL[4]
-                saaint_rep_line = generate_pdb_info(pdbid, mut_status, class_, deposit_date, release_date, method, resolution, r_free, r_work, pmid, doi, title, model.id, asym_id_type) \
-                        + generate_ab_info(pdb_entities, chain_mapping, H_chain_id, L_chain_id, HL_inf_res_num, ab_type) \
-                        + generate_ag_info(pdb_entities, chain_mapping, rep_ags)
-                saaint_rep_lines.append(saaint_rep_line)
-
-                # record all AAIs
-                for i, paired_ab_ag in enumerate(paired_ab_ags):
-                    cur_HL, cur_ags = paired_ab_ag[0], paired_ab_ag[1]
-                    H_chain_id, L_chain_id, HL_inf_res_num, ab_type = cur_HL[0], cur_HL[1], cur_HL[2], cur_HL[4]
-                    saaint_line = generate_pdb_info(pdbid, mut_status, class_, deposit_date, release_date, method, resolution, r_free, r_work, pmid, doi, title, model.id, asym_id_type) \
-                            + generate_ab_info(pdb_entities, chain_mapping, H_chain_id, L_chain_id, HL_inf_res_num, ab_type) \
-                            + generate_ag_info(pdb_entities, chain_mapping, cur_ags)
-                    saaint_lines.append(saaint_line)
-            
-                chain_pair_str = generate_paired_ab_ag_ids(paired_ab_ags, chain_mapping, rep_ndx, model.id)
-            chain_pair_strs.append(chain_pair_str)
-            # clean files
-            clean_files_except_pdb_model(pdbid_model)
-        else:
-            # clean files
-            clean_all_files(pdbid_model)
-            print(f'no ab-ag interaction or ab found in model {model.id}')
-    
-
+    # output paired Ab-Ag interactions or Ab info
     if all_paired_ab_ags:
+        if verbose:
+            print(', '.join([f'pdbid: {pdbid}', f'mutation(s): {mut_status}', f'classification: {class_}', f'deposit_date: {deposit_date}', f'release_date: {release_date}',
+                f'method: {method}', f'resolution: {resolution}', f'r_free: {r_free}', f'r_work: {r_work}', f'pmid: {pmid}', f'doi: {doi}']))
+
         print(f'ab-ag interactions found and written to file')
         l2code = pdbid[1:3]
         if not os.path.exists(l2code): os.mkdir(l2code)
-
-        # write saaint results to file
-        saaint_header = ['PDB_ID', 'Title', 'Mutation(s)', 'Classification', 'Deposit_date', 'Release_date', 'Method', 'Resolution', 'R_free', 'R_work', 'PMID', 'DOI', 
-                'Model_index', 'Asym_ID_type', 'Ab_type', 'H_subgroup', 'L_subgroup', 'H_chain_ID', 'L_chain_ID', 'H_fas_seq', 'L_fas_seq', 'H_filled_pdb_seq', 'L_filled_pdb_seq', 
-                'H_mean_radius', 'L_mean_radius', 'H_fas_seq_len', 'L_fas_seq_len', 'H_pdb_seq_len', 'L_pdb_seq_len', 'H_filled_seq_len', 'L_filled_seq_len', 'HL_inf_res_num', 
-                'H_mol_name', 'L_mol_name', 'H_species', 'L_species', 'Ag_chain_ID(s)', 'Ag_type(s)', 'Ag_mol_name(s)', 'Ag_species', 'Ab_ag_inf_res_num', 'CDR_inf_res_num', 'CDR_inf_res_ratio\n']
-        
+        header_line = ['PDB_ID', 'Title', 'Mutation(s)', 'Classification', 'Deposit_date', 'Release_date', 'Method', 'Resolution', 'R_free', 'R_work', 'PMID', 'DOI', 
+                'Asym_ID_type', 'Ab_type', 'H_subgroup', 'L_subgroup', 'H_chain_ID', 'L_chain_ID', 'H_fas_seq', 'L_fas_seq', 'H_filled_pdb_seq', 'L_filled_pdb_seq', 'H_mean_radius', 'L_mean_radius', 
+                'H_fas_seq_len', 'L_fas_seq_len', 'H_pdb_seq_len', 'L_pdb_seq_len', 'H_filled_seq_len', 'L_filled_seq_len', 'HL_inf_res_num', 'H_mol_name', 'L_mol_name', 'H_species', 'L_species', 
+                'Ag_chain_ID(s)', 'Ag_type(s)', 'Ag_mol_name(s)', 'Ag_species', 'Ab_ag_inf_res_num', 'CDR_inf_res_num', 'CDR_inf_res_ratio\n']
         f_all = open(f'{l2code}/{pdbid}_aai_all.tsv', 'w')
-        f_all.write('\t'.join(saaint_header))
-        for saaint_line in saaint_lines:
-            f_all.write(f'{saaint_line}')
-        f_all.close()
-        
         f_rep = open(f'{l2code}/{pdbid}_aai_rep.tsv', 'w')
-        f_rep.write('\t'.join(saaint_header))
-        for saaint_line in saaint_rep_lines:
-            f_rep.write(f'{saaint_rep_line}')
-        f_rep.close()
-        
         f_pairs = open(f'{l2code}/{pdbid}_paired_ab_ag_ids.tsv', 'w')
-        for chain_pair_str in chain_pair_strs:
-            f_pairs.write(f'{chain_pair_str}')
+        f_all.write('\t'.join(header_line))
+        f_rep.write('\t'.join(header_line))
+        for paired_ab_ags in all_paired_ab_ags:
+            # write representative ab-ag to file
+            rep_ndx = find_representative_ab_ag_pair_index(paired_ab_ags, pdb_entities)
+            rep_HL, rep_ags = paired_ab_ags[rep_ndx][0], paired_ab_ags[rep_ndx][1]
+            H_chain_id, L_chain_id, HL_inf_res_num, ab_type = rep_HL[0], rep_HL[1], rep_HL[2], rep_HL[4]
+            write_pdb_info(f_rep, pdbid, mut_status, class_, deposit_date, release_date, method, resolution, r_free, r_work, pmid, doi, title, asym_id_type)
+            write_ab_info(f_rep, pdb_entities, chain_mapping, H_chain_id, L_chain_id, HL_inf_res_num, ab_type)
+            write_ag_info(f_rep, pdb_entities, chain_mapping, rep_ags)
+
+            # write all paired ab-ag to file
+            for i, paired_ab_ag in enumerate(paired_ab_ags):
+                cur_HL, cur_ags = paired_ab_ag[0], paired_ab_ag[1]
+                H_chain_id, L_chain_id, HL_inf_res_num, ab_type = cur_HL[0], cur_HL[1], cur_HL[2], cur_HL[4]
+                write_pdb_info(f_all, pdbid, mut_status, class_, deposit_date, release_date, method, resolution, r_free, r_work, pmid, doi, title, asym_id_type)
+                write_ab_info(f_all, pdb_entities, chain_mapping, H_chain_id, L_chain_id, HL_inf_res_num, ab_type)
+                write_ag_info(f_all, pdb_entities, chain_mapping, cur_ags)
+            
+            # write paired ab-ag ids to file
+            write_paired_ab_ag_ids(f_pairs, paired_ab_ags, chain_mapping, rep_ndx)
+        f_rep.close()
+        f_all.close()
         f_pairs.close()
+    else:
+        print('no ab-ag interaction or ab found')
+    
+    # clean all temporary files
+    clean_all_temp_files()
 
     print('done parsing (normal exit)')
     return

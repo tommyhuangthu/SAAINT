@@ -75,7 +75,7 @@ def submit_sbatch_jobs(l2codes, list_of_entries, work_dir='./', n_cpu=300):
 #SBATCH --ntasks-per-node=1       ## how many processors do you need on each computer
 #SBATCH --mem=5G                 ## how much memory do you need on each computer
 #SBATCH --time=24:00:00           ## how long does this need to run (DD-HH:MM:ss)
-'''%(job, job, job, 'yanhongg0'))
+'''%(job, job, job, 'jiex99'))
                 for ent in list_of_entries[index]:
                     f.write(f'{abs_path}/run_saaint_parser.py {ent}\n')
 

@@ -74,7 +74,7 @@ def get_resolution(content):
         return 'N.A.'
 
 def get_xray_r_free(content):
-    p1 = re.compile(r'R-Value Free:&nbsp<\/strong>([0-9.]+)&nbsp')
+    p1 = re.compile(r'R-Value Free:&nbsp<\/strong><div> ([0-9.]+) \(')
     matches = re.findall(p1, content)
     if matches:
         return matches[0]
@@ -82,7 +82,7 @@ def get_xray_r_free(content):
         return 'N.A.'
 
 def get_xray_r_work(content):
-    p1 = re.compile(r'R-Value Work:&nbsp<\/strong>([0-9.]+)&nbsp')
+    p1 = re.compile(r'R-Value Work:&nbsp<\/strong><div> ([0-9.]+) \(')
     matches = re.findall(p1, content)
     if matches:
         return matches[0]

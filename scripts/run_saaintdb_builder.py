@@ -1,14 +1,20 @@
 #!/usr/bin/env python3
-import os, datetime, pandas, subprocess
+import os, pandas, subprocess
 
 abs_path = os.path.dirname(os.path.realpath(__file__))
 db_path = f'{abs_path}/../database'
 
-dts = datetime.datetime.now().strftime('%Y%m%d%H')
+
+def get_mmcif_update_date(update_time_file):
+    with open(update_time_file, 'r') as f:
+        update_date = f.readline().rstrip().split()[0]
+        return update_date
+
 
 if __name__ == '__main__':
+    dts = get_mmcif_update_date(f'{db_path}/mmCIF_update_time')
     for tag in ['all', 'rep']:
-        tmp = f'saaintdb_{dts}_{tag}.tmp'
+        tmp = f'saaintdb/saaintdb_{dts}_{tag}.tmp'
         xlsx = tmp.replace('.tmp', '.xlsx')
         tsv = tmp.replace('.tmp', '.tsv')
         
