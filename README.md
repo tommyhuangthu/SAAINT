@@ -6,6 +6,10 @@ This package provides:
 * Implementation of the ```SAAINT-parser``` workflow, designed for fast and accurate extraction and annotation of antibody (Ab) structures and antibody-antigen interactions (AAIs) from the Protein Data Bank (PDB). This results in a comprehensive and up-to-date structural antibody database, ```SAAINT-DB```.
 * Source code for building, analyzing, and updating ```SAAINT-DB```.
 
+```
+Note: Due to github limits on file size, we are unable to upload the SAAINT-DB structure datasets here. Instead, the SAAINT-DB unprocessed PDB structures (in cif format) and SAAINT-parser-processed structure models are available at [Zenodo](https://zenodo.org/10.5281/zenodo.15335871)
+```
+
 ## Installation and running SAAINT-parser
 
 1. Configure the environment
