@@ -186,7 +186,7 @@ This package provides:
 
 ## SAAINT-DB vs. SAbDab
 
-   Below we provide a head-to-head statistical comparison between SAAINT-DB (updated on Jan 29, 2025) and SAbDab (updated on Jan 17, 2025) 
+   Below we provide a head-to-head statistical comparison between SAAINT-DB (updated on May 1, 2025) and SAbDab (updated on May 2, 2025) 
 
 Item for comparison                            | SAAINT-DB    | SAbDab
 --------------------------------------------:  | -----------: | -------:
