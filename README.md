@@ -199,8 +199,6 @@ Item for comparison                            | SAAINT-DB    | SAbDab
 #{PDB entries with Ab-Ag binding affinity data}|  1,331       |    736
 #{nonredundant Ab-Ag binding affinity data}    |  1,444       |    736
 
-<sup>1</sup> Obsolete and replaced PDB entries are excluded from SAbDab; for structures where multiple models are available for one assembly (such as NMR or some EM structures), only one data entry is retained.
-
 ## Reference
 
 [Huang X, Zhou J, Chen S, Xia X, Chen YE, Xu J. Fast, accurate parsing of antibody structures and antibody-antigen interactions enables a comprehensive structural antibody database. bioRxiv. doi: 10.1101/2025.02.25.640196](https://www.biorxiv.org/content/10.1101/2025.02.25.640196v1.full)
