@@ -7,7 +7,7 @@ This package provides:
 * Source code for building, analyzing, and updating ```SAAINT-DB```.
 
 
-<strong>[Note: We are unable to upload the large SAAINT-DB structure datasets to GitHub due to file size limits. As a result, the SAAINT-DB unprocessed PDB structures (in mmCIF format) and SAAINT-parser-processed structure models (in PDB format) are available at Zenodo.](https://doi.org/10.5281/zenodo.15335870)
+<strong>[Note: We are unable to upload the large SAAINT-DB structure datasets to GitHub due to file size limits. Users can access the unprocessed PDB structures (in the PDBx/mmCIF format) and SAAINT-parser-processed structure models (in the PDB format) from Zenodo.](https://doi.org/10.5281/zenodo.15335870)
 </strong>
 
 
