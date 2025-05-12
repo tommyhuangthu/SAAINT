@@ -1224,13 +1224,12 @@ def generate_pdb_info(pdbid, mut_status, class_, deposit_date, release_date, met
 
 #def clean_files():
 #    os.system(f'rm {pdbid}*.fasta {pdbid}*.abrsa* {pdbid}*.abalign {pdbid}*.msa* {pdbid}*.vgene* {pdbid}*.unidesign {pdbid}*.tmalign 2>/dev/null')
-#
 
 def clean_files_except_pdb_model(pdbid_model):
     os.system(f'rm {pdbid_model}_*.pdb {pdbid}*.fasta {pdbid}*.abrsa* {pdbid}*.abalign {pdbid}*.msa* {pdbid}*.vgene* {pdbid}*.unidesign {pdbid}*.tmalign 2>/dev/null')
 
-def clean_all_files(pdbid_model):
-    os.system(f'rm {pdbid_model}*.pdb {pdbid}*.fasta {pdbid}*.abrsa* {pdbid}*.abalign {pdbid}*.msa* {pdbid}*.vgene* {pdbid}*.unidesign {pdbid}*.tmalign 2>/dev/null')
+def clean_all_files(pdbid):
+    os.system(f'rm {pdbid}*.pdb {pdbid}*.fasta {pdbid}*.abrsa* {pdbid}*.abalign {pdbid}*.msa* {pdbid}*.vgene* {pdbid}*.unidesign {pdbid}*.tmalign 2>/dev/null')
 
 
 #################################
@@ -1277,7 +1276,7 @@ def parse_ab_ag_interaction(pdbid, pdb_fasta_path, pdb_cif_path):
             print(f'chain_ids: {ent.get_chain_ids()}, fas_seq: {ent.get_fas_seq()}, fas_seq_len: {len(ent.get_fas_seq())}, abrsa_type (by fasta): {abrsa_type}')
     
     if not ('heavy' in all_chain_abrsa_types or 'heavy_light' in all_chain_abrsa_types or 'light' in all_chain_abrsa_types):
-        clean_all_files()
+        clean_all_files(pdbid)
         print(f'done parsing (no ab chain found in {pdbid})')
         exit(0)
 
@@ -1286,7 +1285,7 @@ def parse_ab_ag_interaction(pdbid, pdb_fasta_path, pdb_cif_path):
     for char in chars_to_be_removed:
         single_letters.remove(char)
     if total_chain_num >= len(single_letters):
-        clean_all_files()
+        clean_all_files(pdbid)
         print(f'skip parsing (too many, {total_chain_num}) chains in the structure')
         exit(0)
     
@@ -1452,7 +1451,7 @@ def parse_ab_ag_interaction(pdbid, pdb_fasta_path, pdb_cif_path):
         
             os.system(f'cat {pdbid_model}_prot.pdb {pdbid_model}_nonprot_*.pdb > {pdbid_model}.pdb 2>/dev/null')
         else:
-            clean_all_files()
+            clean_all_files(pdbid)
             print(f'done parsing (no protein chain found in {pdbid_model}.pdb)')
             exit(0)
 
@@ -1509,7 +1508,7 @@ def parse_ab_ag_interaction(pdbid, pdb_fasta_path, pdb_cif_path):
             clean_files_except_pdb_model(pdbid_model)
         else:
             # clean files
-            clean_all_files(pdbid_model)
+            clean_all_files(pdbid)
             print(f'no ab-ag interaction or ab found in model {model.id}')
     
 

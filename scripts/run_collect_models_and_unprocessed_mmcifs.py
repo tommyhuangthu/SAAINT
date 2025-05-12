@@ -12,7 +12,7 @@ if __name__ == '__main__':
     if not os.path.exists(f'{abs_path}/../database/processed_models'):
         os.system(f'mkdir {abs_path}/../database/processed_models')
     os.system(f'mv mkdir {abs_path}/../database/saaint_divided/*.pdb {abs_path}/../database/processed_models')
-    os.system(f'tar -cvf - {abs_path}/../database/processed_models | split -b 90M - {abs_path}/../database/processed_models.tar.part_')
+    os.system(f'tar -czf {abs_path}/../database/processed_models.tar.gz {abs_path}/../database/processed_models')
     
     # copy mmcif.gz to unprocessed_mmcifs
     if not os.path.exists(f'{abs_path}/../database/unprocessed_mmcifs'):
@@ -21,4 +21,7 @@ if __name__ == '__main__':
     for ent in ents:
         l2code = ent[1:3]
         os.system(f'cp {abs_path}/../database/mmCIF_divided/{l2code}/{ent}.cif.gz {abs_path}/../database/unprocessed_mmcifs')
+    os.system(f'gunzip -r {abs_path}/../database/unprocessed_mmcifs')
+    os.system(f'tar -czf {abs_path}/../database/unprocessed_mmcifs.tar.gz {abs_path}/../database/unprocessed_mmcifs')
+
     

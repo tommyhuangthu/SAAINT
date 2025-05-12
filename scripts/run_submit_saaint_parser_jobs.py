@@ -1,9 +1,34 @@
 #!/usr/bin/env python3
 import os, sys, subprocess
-from utils import read_list, get_l2codes, get_pdbids_by_l2code, abalign_lib
+from utils import read_list, get_l2codes, get_pdbids_by_l2code, abalign_lib, parse_rsync_mmcif_out
 
 # get the absolute path of current python script file
 abs_path = os.path.dirname(os.path.realpath(__file__))
+
+def delete_saaint_results(saaint_path, obsolete_list, update_dict):
+    for pdbid in obsolete_list:
+        if os.path.exists(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_aai_all.tsv'):
+            print(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_aai_all.tsv will be removed')
+            os.remove(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_aai_all.tsv')
+        if os.path.exists(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_aai_rep.tsv'):
+            print(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_aai_rep.tsv will be removed')
+            os.remove(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_aai_rep.tsv')
+        if os.path.exists(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_paired_ab_ag_ids.tsv'):
+            print(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_paired_ab_ag_ids.tsv will be removed')
+            os.remove(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_paired_ab_ag_ids.tsv')
+    for l2code in update_dict:
+        for pdbid in update_dict[l2code]:
+            if os.path.exists(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_aai_all.tsv'):
+                print(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_aai_all.tsv will be removed')
+                os.remove(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_aai_all.tsv')
+            if os.path.exists(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_aai_rep.tsv'):
+                print(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_aai_rep.tsv will be removed')
+                os.remove(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_aai_rep.tsv')
+            if os.path.exists(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_paired_ab_ag_ids.tsv'):
+                print(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_paired_ab_ag_ids.tsv will be removed')
+                os.remove(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_paired_ab_ag_ids.tsv')
+    return
+
 
 def allocate_entries_by_cif_path(cif_path, n_cpu=300):
     list_of_entries = []
@@ -93,14 +118,21 @@ if __name__ == '__main__':
     
     if type_ == '-path':
         cif_path = sys.argv[2]
-        work_dir = sys.argv[3]
+        saaint_path = sys.argv[3]
         n_cpu = int(sys.argv[4])
         l2codes, list_of_entries = allocate_entries_by_cif_path(cif_path, n_cpu=n_cpu)
-        submit_sbatch_jobs(l2codes, list_of_entries, work_dir=work_dir, n_cpu=n_cpu)
+        submit_sbatch_jobs(l2codes, list_of_entries, work_dir=saaint_path, n_cpu=n_cpu)
     elif type_ == '-list':
         cif_list = sys.argv[2]
-        work_dir = sys.argv[3]
+        saaint_path = sys.argv[3]
         n_cpu = int(sys.argv[4])
+        
+
+        # delete previously calculated saaint results for obsolete entries
+        obsolete_list, update_dict = parse_rsync_mmcif_out(f'{abs_path}/../record/rsync_mmCIF.out')
+        #saaint_path = f'{abs_path}/../database/saaint_divided'
+        delete_saaint_results(saaint_path, obsolete_list, update_dict)
+
         l2codes, list_of_entries = allocate_entries_by_cif_list(cif_list, n_cpu=n_cpu)
-        submit_sbatch_jobs(l2codes, list_of_entries, work_dir=work_dir, n_cpu=n_cpu)
+        submit_sbatch_jobs(l2codes, list_of_entries, work_dir=saaint_path, n_cpu=n_cpu)
 

@@ -513,3 +513,24 @@ def calculate_mean_radius(pdb_file):
     radius = np.sqrt(square)
 
     return radius
+
+
+def parse_rsync_mmcif_out(rsync_out):
+    obsolete_list, update_dict = [], dict()
+    with open(rsync_out, 'r') as f:
+        for line in f.readlines():
+            line = line.rstrip()
+            if line.startswith('deleting'):
+                pdbid = line[-11:-7]
+                obsolete_list.append(pdbid)
+            elif line[-7:] == '.cif.gz':
+                pdbid = line[-11:-7]
+                l2code = pdbid[1:3]
+                if l2code not in update_dict:
+                    update_dict[l2code] = [pdbid]
+                else:
+                    update_dict[l2code].append(pdbid)
+    return obsolete_list, update_dict
+
+
+
