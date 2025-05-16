@@ -150,7 +150,7 @@ This package provides:
 
    To make statistical analyses of the SAAINT-DB data entries, run:
    ```bash
-   python3 scripts/run_saaintdb_analyzer.py saaintdb/saaintdb_affinity_rep.tsv -j <jobname>
+   python3 scripts/run_saaintdb_analyzer.py saaintdb/saaintdb_affinity.tsv -j <jobname>
    ```
    Here, ```<jobname>``` takes the following options:\
    ```affinity```: Plots a histogram of pKd values.\
