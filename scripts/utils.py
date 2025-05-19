@@ -55,7 +55,7 @@ class Entity:
         self.chain_types = [] # protein, DNA, RNA, or unknown
         self.real_pdb_seqs = []
         self.filled_pdb_seqs = []
-        self.abrsa_types = [] # 'heavy', 'light', 'heavy_light', 'antigen'
+        self.abrsa_types = [] # 'heavy', 'light', 'heavy_light', 'nonab'
         self.cdr_res = []
         self.vgene_subgroups = []
         self.paired_chains = []

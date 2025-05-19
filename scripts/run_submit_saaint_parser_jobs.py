@@ -8,24 +8,24 @@ abs_path = os.path.dirname(os.path.realpath(__file__))
 def delete_saaint_results(saaint_path, obsolete_list, update_dict):
     for pdbid in obsolete_list:
         if os.path.exists(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_aai_all.tsv'):
-            print(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_aai_all.tsv will be removed')
+            print(f'deleting {saaint_path}/{pdbid[1:3]}/{pdbid}_aai_all.tsv')
             os.remove(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_aai_all.tsv')
         if os.path.exists(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_aai_rep.tsv'):
-            print(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_aai_rep.tsv will be removed')
+            print(f'deleting {saaint_path}/{pdbid[1:3]}/{pdbid}_aai_rep.tsv')
             os.remove(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_aai_rep.tsv')
         if os.path.exists(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_paired_ab_ag_ids.tsv'):
-            print(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_paired_ab_ag_ids.tsv will be removed')
+            print(f'deleting {saaint_path}/{pdbid[1:3]}/{pdbid}_paired_ab_ag_ids.tsv')
             os.remove(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_paired_ab_ag_ids.tsv')
     for l2code in update_dict:
         for pdbid in update_dict[l2code]:
             if os.path.exists(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_aai_all.tsv'):
-                print(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_aai_all.tsv will be removed')
+                print(f'deleting {saaint_path}/{pdbid[1:3]}/{pdbid}_aai_all.tsv')
                 os.remove(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_aai_all.tsv')
             if os.path.exists(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_aai_rep.tsv'):
-                print(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_aai_rep.tsv will be removed')
+                print(f'deleting {saaint_path}/{pdbid[1:3]}/{pdbid}_aai_rep.tsv')
                 os.remove(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_aai_rep.tsv')
             if os.path.exists(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_paired_ab_ag_ids.tsv'):
-                print(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_paired_ab_ag_ids.tsv will be removed')
+                print(f'deleting {saaint_path}/{pdbid[1:3]}/{pdbid}_paired_ab_ag_ids.tsv')
                 os.remove(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_paired_ab_ag_ids.tsv')
     return
 
