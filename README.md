@@ -207,7 +207,7 @@ Item for comparison                            | SAAINT-DB    | SAbDab
 
 ## SAAINT-DB Statistics across updates
 
-Item for comparison                            | 2025-05-01   | 2025-05-19
+Item for comparison                            | v.20250501   | v.20250519
 --------------------------------------------:  | -----------: | ---------:
 #{PDB entries}                                 |  9,757       |      9,792
 #{data entries}                                | 19,128       |     19,189
