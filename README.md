@@ -191,7 +191,7 @@ This package provides:
 
 ## SAAINT-DB vs. SAbDab
 
-   Below we provide a head-to-head statistical comparison between SAAINT-DB (updated on May 1, 2025) and SAbDab (updated on May 2, 2025) 
+   Below we provide a head-to-head statistical comparison between SAAINT-DB (updated on 1-May-2025) and SAbDab (updated on 2-May-2025) 
 
 Item for comparison                            | SAAINT-DB    | SAbDab
 --------------------------------------------:  | -----------: | -------:
@@ -203,6 +203,23 @@ Item for comparison                            | SAAINT-DB    | SAbDab
 #{data entries with Ag}                        | 14,316       | 14,869
 #{PDB entries with Ab-Ag binding affinity data}|  1,331       |    736
 #{nonredundant Ab-Ag binding affinity data}    |  1,444       |    736
+
+## SAAINT-DB Statistics across updates
+
+Item for comparison                            | 2025-05-01   | 2025-05-19
+--------------------------------------------:  | -----------: | ---------:
+#{PDB entries}                                 |  9,757       |  9,521
+#{data entries}                                | 19,128       | 18,744
+#{PDB entries with ≥1 paired VH/VL}            |  7,822       |  7,622
+#{data entries with ≥1 paired VH/VL}           | 14,747       | 14,420
+#{PDB entries with Ag}                         |  7,489       |  7,788
+#{data entries with Ag}                        | 14,316       | 14,869
+#{PDB entries with Ab-Ag binding affinity data}|  1,331       |   1,331
+#{nonredundant Ab-Ag binding affinity data}    |  1,444       |   1,444
+
+
+
+
 
 ## Reference
 
