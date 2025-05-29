@@ -18,7 +18,7 @@ if __name__ == '__main__':
     # move rsync models to processed models
     if not os.path.exists(f'{abs_path}/../database/processed_pdb_models_{dts}'):
         os.system(f'mkdir {abs_path}/../database/processed_pdb_models_{dts}')
-    os.system(f'rsync -avz {abs_path}/../database/saaint_divided/*.pdb {abs_path}/../database/processed_pdb_models_{dts}/')
+    os.system(f'rsync -az {abs_path}/../database/saaint_divided/*.pdb {abs_path}/../database/processed_pdb_models_{dts}/')
     os.system(f'tar -czf {abs_path}/../database/processed_pdb_models_{dts}.tar.gz {abs_path}/../database/processed_pdb_models_{dts}')
     
     # copy mmcif.gz to unprocessed_mmcifs

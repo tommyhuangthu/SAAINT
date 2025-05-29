@@ -815,7 +815,7 @@ def plot_affinity(df):
     return
 
 
-def count_entry_num(df):
+def count_num_entries(df):
     unique_pdbs, data_num = [], 0
     for i in range(len(df['PDB_ID'])):
         data_num += 1
@@ -826,7 +826,7 @@ def count_entry_num(df):
     return
 
 
-def count_num_of_pdbs_with_paired_vhvl(df):
+def count_num_entries_with_paired_vhvl(df):
     df_new = df[df['Ab_type'] != 'N.A.'].drop_duplicates(ignore_index=True)
     pdbs, num_vhvl = [], 0
     for i in range(len(df_new['Ab_type'])):
@@ -837,10 +837,10 @@ def count_num_of_pdbs_with_paired_vhvl(df):
             pdb = df_new.loc[i, 'PDB_ID']
             if pdb not in pdbs:
                 pdbs.append(pdb)
-    print(f'num_pdbs_with_paired_vhvl: {len(pdbs)}, num_VHVLs: {num_vhvl}')
+    print(f'num_pdbs_with_paired_vhvl: {len(pdbs)}, num_entries_with_paired_vhvl: {num_vhvl}')
     return
 
-def count_num_of_pdbs_with_ag(df):
+def count_num_entries_with_ag(df):
     df_new = df[df['Ag_type(s)'] != 'N.A.'].drop_duplicates(ignore_index=True)
     pdbs, num_ag_entries = [], 0
     for i in range(len(df_new['Ag_type(s)'])):
@@ -848,11 +848,11 @@ def count_num_of_pdbs_with_ag(df):
         pdb = df_new.loc[i, 'PDB_ID']
         if pdb not in pdbs:
             pdbs.append(pdb)
-    print(f'num_pdbs_with_ag: {len(pdbs)}, num_ag_entries: {num_ag_entries}')
+    print(f'num_pdbs_with_ag: {len(pdbs)}, num_entries_with_ag: {num_ag_entries}')
     return
 
 
-def count_num_of_pdbs_with_affinity(df):
+def count_num_entries_with_affinity(df):
     df_new = df[df['Affinity_KD(nM)'] != 'N.A.'].drop_duplicates(ignore_index=True)
     pdbs, num_aff = [], 0
     for i in range(len(df_new['Affinity_KD(nM)'])):
@@ -860,7 +860,7 @@ def count_num_of_pdbs_with_affinity(df):
         pdb = df_new.loc[i, 'PDB_ID']
         if pdb not in pdbs:
             pdbs.append(pdb)
-    print(f'num_pdbs_with_affinity: {len(pdbs)}, num_affinity_entries: {num_aff}')
+    print(f'num_pdbs_with_affinity: {len(pdbs)}, num_entries_with_affinity: {num_aff}')
     return
 
 def check_ab_spe(df):
@@ -887,11 +887,11 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=usage)
     parser.add_argument('saaint_file', type=str, help='Input a saaint database summary file')
     parser.add_argument('-j', '--job', type=str, choices=[
-        '', 'date', 'classification', 'method', 'resolution', 'publication', 'asym_id', 'plot_pdb_num', 'count_entry_num', 
+        '', 'date', 'classification', 'method', 'resolution', 'publication', 'asym_id', 'plot_pdb_num', 'num_entries', 
         'ab_spe', 'ab_type', 'HL_inf_res_num', 'HL_chain_len', 'radius',
         'ag_spe', 'ag_type', 'ab_ag_inf_res_num', 'cdr_inf_res_num', 'cdr_inf_res_ratio', 'ag_chain_num', 
-        'num_pdbs_with_paired_vhvl', 'num_pdbs_with_ag', 'check_ab_spe', 'plot_all', 
-        'affinity', 'num_pdbs_with_affinity'], default='', help='Choose a job type for analysis')
+        'num_entries_with_paired_vhvl', 'num_entries_with_ag', 'check_ab_spe', 'plot_all', 
+        'affinity', 'num_entries_with_affinity'], default='', help='Choose a job type for analysis')
     args = parser.parse_args()
     saaint_file = ''
 
@@ -928,9 +928,9 @@ if __name__ == '__main__':
     elif job == 'plot_pdb_num':
         df = pd.read_excel(saaint_file, index_col=None, keep_default_na=False)
         plot_pdb_num(df)
-    elif job == 'count_entry_num':
+    elif job == 'num_entries':
         df = pd.read_excel(saaint_file, index_col=None, keep_default_na=False)
-        count_entry_num(df)
+        count_num_entries(df)
     elif job == 'method':
         df = pd.read_excel(saaint_file, index_col=None, keep_default_na=False)
         plot_method(df)
@@ -983,12 +983,12 @@ if __name__ == '__main__':
         df = pd.read_excel(saaint_file, index_col=None, keep_default_na=False)
         plot_radius(df)
     
-    elif job == 'num_pdbs_with_paired_vhvl':
+    elif job == 'num_entries_with_paired_vhvl':
         df = pd.read_excel(saaint_file, index_col=None, keep_default_na=False)
-        count_num_of_pdbs_with_paired_vhvl(df)
-    elif job == 'num_pdbs_with_ag':
+        count_num_entries_with_paired_vhvl(df)
+    elif job == 'num_entries_with_ag':
         df = pd.read_excel(saaint_file, index_col=None, keep_default_na=False)
-        count_num_of_pdbs_with_ag(df)
+        count_num_entries_with_ag(df)
     elif job == 'check_ab_spe':
         df = pd.read_excel(saaint_file, index_col=None, keep_default_na=False)
         check_ab_spe(df)
@@ -997,8 +997,8 @@ if __name__ == '__main__':
     elif job == 'affinity':
         df = pd.read_csv(saaint_file, sep='\t', index_col=None, keep_default_na=False)
         plot_affinity(df)
-    elif job == 'num_pdbs_with_affinity':
+    elif job == 'num_entries_with_affinity':
         df = pd.read_csv(saaint_file, sep='\t', index_col=None, keep_default_na=False)
-        count_num_of_pdbs_with_affinity(df)
+        count_num_entries_with_affinity(df)
     
 
