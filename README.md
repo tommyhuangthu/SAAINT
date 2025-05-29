@@ -122,29 +122,28 @@ This package provides:
    ```bash
    python3 scripts/run_saaintdb_analyzer.py saaintdb/saaintdb_2025012908_all.xlsx -j <jobname>
    ```
-   Here, ```<jobname>``` takes the following options:\
-   ```date```: Analyzes the deposition and release dates of PDB entries.\
-   ```classification```: Examines the classification of PDB entries.\
-   ```method```: Analyzes the experimental methods used to determine PDB structures.\
-   ```resolution```: analyzes the resolution of X-ray and EM structures\
-   ```publication```: Analyzes PDB-associated publication details, including PMID and DOI.\
-   ```asym_id```: Analyzes the types of asym_id used to parse PDB entries.\
-   ```plot_pdb_num```: Plots the number of PDB entries over released years.\
-   ```count_pdb_num```: Counts the number of PDB entries per release year.\
-   ```count_data_num```: Counts the total number of data entries.\
-   ```ab_spe```: Analyzes the top species for antibody heavy and light chains.\
-   ```ab_type```: Analyzes antibody types annotated by the SAAINT parser.\
-   ```HL_inf_res_num```: Analyzes and plots the number of heavy chain-light chain interface residues per antibody types.\
-   ```HL_chain_len```: Analyzes and plots the length distribution of heavy and light chains.\
-   ```radius```: Analyzes and plots the distribution of mean radius for scFv and VHVL types.\
-   ```ag_spe```: Analyzes the top antigen species.\
-   ```ag_type```: Analyzes antigen types.\
-   ```ab_ag_inf_res_num```: Plots a histogram of antibody-antigen interface residue counts.\
-   ```cdr_inf_res_num```: Plots a histogram of interface CDR residue counts.\
-   ```cdr_inf_res_ratio```: Plots a histogram of the ratio of interface CDR residues to total interface antibody residues.\
-   ```ag_chain_num```: Analyzes the number of antigens with varying chain counts.\
-   ```num_pdbs_with_paired_vhvl```: Counts the PDB entries containing paired VH/VL chains.\
-   ```num_pdbs_with_ag```: Counts the PDB entries that include an antigen.
+   Here, ```<jobname>``` can take the following options:\
+   ```date```: Analyze the deposition and release dates of PDB entries.\
+   ```classification```: Examine the classification of PDB entries.\
+   ```method```: Analyze the experimental methods used to determine PDB structures.\
+   ```resolution```: Analyze the resolution of X-ray and EM structures\
+   ```publication```: Analyze PDB-associated publication details, including PMID and DOI.\
+   ```asym_id```: Analyze the types of asym_id used to parse PDB entries.\
+   ```plot_pdb_num```: Plot the number of PDB entries over released years.\
+   ```num_entries```: Count the number of PDB and data entries. \
+   ```ab_spe```: Analyze the top species for antibody heavy and light chains.\
+   ```ab_type```: Analyze antibody types annotated by the SAAINT parser.\
+   ```HL_inf_res_num```: Analyze and plot the number of heavy chain-light chain interface residues per antibody types.\
+   ```HL_chain_len```: Analyze and plots the length distribution of heavy and light chains.\
+   ```radius```: Analyze and plots the distribution of mean radius for scFv and VHVL types.\
+   ```ag_spe```: Analyze the top antigen species.\
+   ```ag_type```: Analyze antigen types.\
+   ```ab_ag_inf_res_num```: Plot a histogram of antibody-antigen interface residue counts.\
+   ```cdr_inf_res_num```: Plot a histogram of interface CDR residue counts.\
+   ```cdr_inf_res_ratio```: Plot a histogram of the ratio of interface CDR residues to total interface antibody residues.\
+   ```ag_chain_num```: Analyze the number of antigens with varying chain counts.\
+   ```num_entries_with_paired_vhvl```: Count the PDB and data entries with paired VH/VL chains.\
+   ```num_entries_with_ag```: Count the PDB and data entries with antigen.
 
 1. Analyze antibody-antigen binding affinity data
 
