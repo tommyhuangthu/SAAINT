@@ -1,9 +1,9 @@
 # SAAINT
 
-SAAINT stands for <strong><ins>S</ins>tructures of <ins>A</ins>ntibodies and Antibody-<ins>A</ins>ntigen <ins>INT</ins>eractions</strong>.
+SAAINT stands for <strong><ins>S</ins>tructural <ins>A</ins>ntibody and Antibody-<ins>A</ins>ntigen <ins>INT</ins>eraction</strong>.
 
 This package provides: 
-* Implementation of the ```SAAINT-parser``` workflow, designed for fast and accurate extraction and annotation of antibody (Ab) structures and antibody-antigen interactions (AAIs) from the Protein Data Bank (PDB). This results in a comprehensive and up-to-date structural antibody database, ```SAAINT-DB```.
+* Implementation of the ```SAAINT-parser``` workflow, designed for fast and accurate extraction and annotation of antibody (Ab) structures and antibody-antigen interactions (AAIs) from the Protein Data Bank (PDB). This results in a comprehensive and up-to-date structural antibody and antibody-antigen interaction database, ```SAAINT-DB```.
 * Source code for building, analyzing, and updating ```SAAINT-DB```.
 
 
