@@ -206,14 +206,14 @@ Item for comparison                            | SAAINT-DB    | SAbDab
 
 ## SAAINT-DB Statistics across updates
 
-Item for comparison                       | v.20250501 | v.20250519 | v.20250523 | v.20250528
+Item for comparison                       | v.20250501 | v.20250523 | v.20250528 | v.20250606
 ----------------------------------------: | ---------: | ---------: | ---------: | ---------:
-#{PDB entries}                            |      9,757 |      9,792 |      9,822 |      9,861
-#{data entries}                           |     19,128 |     19,189 |     19,275 |     19,350
-#{PDB entries with ≥1 paired VH/VL}       |      7,822 |      7,851 |      7,870 |      7,902
-#{data entries with ≥1 paired VH/VL}      |     14,747 |     14,802 |     14,860 |     14,920
-#{PDB entries with Ag}                    |      7,489 |      7,524 |      7,553 |      7,584
-#{data entries with Ag}                   |     14,316 |     14,377 |     14,462 |     14,515
+#{PDB entries}                            |      9,757 |      9,822 |      9,861 |      9,905
+#{data entries}                           |     19,128 |     19,275 |     19,350 |     19,411
+#{PDB entries with ≥1 paired VH/VL}       |      7,822 |      7,870 |      7,902 |      7,920
+#{data entries with ≥1 paired VH/VL}      |     14,747 |     14,860 |     14,920 |     14,949
+#{PDB entries with Ag}                    |      7,489 |      7,553 |      7,584 |      7,628
+#{data entries with Ag}                   |     14,316 |     14,462 |     14,515 |     14,574
 #{PDB entries with Ab-Ag binding affinity}|      1,331 |      1,331 |      1,331 |      1,331
 #{nonredundant Ab-Ag binding affinity}    |      1,444 |      1,444 |      1,444 |      1,444
 
