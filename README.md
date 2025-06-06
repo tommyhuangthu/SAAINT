@@ -79,8 +79,7 @@ This package provides:
    ```
    Successfully identified antibodies and antibody-antigen interactions are saved in a folder named after the two middle letters of the PDB entry. For example, for ```5zxv```, the results are stored in the ```zx``` folder:\
    ```zx/5zxv_aai_all.tsv```: contains all identified antibodies or AAIs.\
-   ```zx/5zxv_aai_rep.tsv```: records representative antibodies or AAIs (see Reference for details).\
-   ```zx/5zxv_paired_ab_ag_ids.tsv```: lists paired antibody-antigen chain IDs, and labels representative and nonrepresentative pairs.
+   ```zx/5zxv_paired_ab_ag_ids.tsv```: lists paired antibody-antigen chain IDs.
 
 ## Building SAAINT-DB
 
@@ -109,10 +108,9 @@ This package provides:
    ```bash
    python3 ./scripts/run_saaintdb_builder.py
    ```
-  This command merges all ```*_aai_all.tsv``` and ```*_aai_rep.tsv``` files to generate the SAAINT-DB full and representative datasets. \
-  The SAAINT-DB full dataset is saved as ```saaintdb_{timestamp}_all.xlsx``` and ```saaintdb_{timestamp}_all.tsv```. \
-  The representative dataset is saved as ```saaintdb_{timestamp}_rep.xlsx``` and ```saaintdb_{timestamp}_rep.tsv```. Here, ```{timestamp}``` (e.g., ```2025012908```) represents the date and time of the database build. \
-  For more details, refer to ```saaintdb/saaintdb_2025012908_all.xlsx```, ```saaintdb/saaintdb_2025012908_all.tsv```, ```saaintdb/saaintdb_2025012908_rep.xlsx```, and ```saaintdb/saaintdb_2025012908_all.tsv```.
+  This command merges all ```*_aai_all.tsv``` files to generate the SAAINT-DB summary file. \
+  The SAAINT-DB full dataset is saved as ```saaintdb_{timestamp}_all.xlsx``` and ```saaintdb_{timestamp}_all.tsv```. Here, ```{timestamp}``` (e.g., ```20250501```) represents the date of the database build. \
+  For more details, refer to ```saaintdb/saaintdb_20250501_all.xlsx``` and ```saaintdb/saaintdb_20250501_all.tsv```.
 
 ## Analyzing SAAINT-DB and antibody-antigen binding affinity data
 
