@@ -13,13 +13,12 @@ def get_mmcif_update_date(update_time_file):
 
 if __name__ == '__main__':
     dts = get_mmcif_update_date(f'{db_path}/mmCIF_update_time')
-    for tag in ['all', 'rep']:
+    for tag in ['all']:
         tmp = f'saaintdb/saaintdb_{dts}_{tag}.tmp'
         xlsx = tmp.replace('.tmp', '.xlsx')
         tsv = tmp.replace('.tmp', '.tsv')
         
         folder_name='saaint_divided'
-        #folder_name='test_vh'
         subprocess.run([f'cat {db_path}/{folder_name}/[0-9a-z][0-9a-z]/*_{tag}.tsv | head -n 1 > {tmp}'], 
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         subprocess.run([f'cat {db_path}/{folder_name}/[0-9a-z][0-9a-z]/*_{tag}.tsv | grep -v PDB_ID >> {tmp}'], 

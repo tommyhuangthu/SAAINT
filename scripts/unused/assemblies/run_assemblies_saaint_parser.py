@@ -602,35 +602,13 @@ def find_best_pairing_by_greedy_search(pdb_entities):
     return
 
 
-def check_ag_and_ab_chains_in_same_assembly(assems, ag_chain_id, H_chain_id, L_chain_id, asym_id_type, chain_mapping):
-    # if assems == [], all chains are in the same assembly, return True
-    if not assems:
-        return True
-
-    ori_ag_chain_id, ori_H_chain_id, ori_L_chain_id = '', '', ''
-    if ag_chain_id and ag_chain_id != 'N.A.':
-        ori_ag_chain_id = chain_mapping[ag_chain_id]
-    if H_chain_id and H_chain_id != 'N.A.':
-        ori_H_chain_id = chain_mapping[H_chain_id]
-    if L_chain_id and L_chain_id != 'N.A.':
-        ori_L_chain_id = chain_mapping[L_chain_id]
-
-    for assem in assems:
-        if (ori_H_chain_id in assem and ori_ag_chain_id in assem) or (ori_L_chain_id in assem and ori_ag_chain_id in assem):
-            return True
-    return False
-
-
-
-
-def build_ab_ag_pairs(unidesign, pdbid, paired_HLs, pdb_entities, all_paired_ab_ags, chain_mapping, assems):
+def build_ab_ag_pairs(unidesign, pdbid, paired_HLs, pdb_entities, all_paired_ab_ags):
     paired_ab_ags = []
     for paired_HL in paired_HLs:
         H_chain_id, L_chain_id, HL_inf_res_num, ab_type = paired_HL[0], paired_HL[1], paired_HL[2], paired_HL[3]
         ent_H, index_H = find_ent_by_chain_id(pdb_entities, H_chain_id)
         ent_L, index_L = find_ent_by_chain_id(pdb_entities, L_chain_id)
         paired_ags = []
-        same_assembly_flags = []
         # do not pair single FabH or FabL with Ag molecules
         if ab_type == 'FabH' or ab_type == 'FabL': 
             paired_ags.append(['', 0, 0, 0.00])
@@ -685,23 +663,10 @@ def build_ab_ag_pairs(unidesign, pdbid, paired_HLs, pdb_entities, all_paired_ab_
                     if verbose:
                         print(f'cdr_inf_res_num: {cdr_inf_res_num}, cdr_inf_res_ratio: {cdr_inf_res_ratio}')
                     
-                    if cdr_inf_res_ratio >= 0.25 and cdr_inf_res_num >= 5 and cdr_inf_res_num >= fr_inf_res_num: 
+                    if cdr_inf_res_ratio >= 0.25 and cdr_inf_res_num >= 5: 
+                    #if cdr_inf_res_ratio >= 0.25 and cdr_inf_res_num >= 8 and cdr_inf_res_num >= fr_inf_res_num: 
                         paired_ags.append([ag_chain_id, inf_res_num, cdr_inf_res_num, round(cdr_inf_res_ratio, 2)])
-                        same_assembly_flag = check_ag_and_ab_chains_in_same_assembly(assems, ag_chain_id, H_chain_id, L_chain_id, asym_id_type, chain_mapping)
-                        print(same_assembly_flag)
-                        same_assembly_flags.append(same_assembly_flag)
         if paired_ags:
-            '''while len(paired_ags) > 1:
-                index_to_remove = -1
-                for i, same_assembly_flag in enumerate(same_assembly_flags):
-                    if same_assembly_flag == False:
-                        index_to_remove = i
-                        break
-                if index_to_remove != -1:
-                    del same_assembly_flags[index_to_remove]
-                    del paired_ags[index_to_remove]
-                else:
-                    break'''
             paired_ab_ags.append([paired_HL, paired_ags])
         else:
             paired_ags.append(['', 0, 0, 0.00])
@@ -774,47 +739,6 @@ def compute_cdr_residues(ent, pdbid, abrsa_pdb):
     return
 
 
-def find_representative_ab_ag_pair_index(paired_ab_ags, pdb_entities):
-    rep_ndx = 0
-    rep_score = -10000
-    for index, paired_ab_ag in enumerate(paired_ab_ags):
-        score = 0
-        paired_HL, paired_ags = paired_ab_ag[0], paired_ab_ag[1]
-        H_chain_id, L_chain_id, HL_inf_res_num = paired_HL[0], paired_HL[1], paired_HL[2]
-
-        # reward H_pdb_seq_len and L_pdb_seq_len
-        if H_chain_id:
-            ent_H, index_H = find_ent_by_chain_id(pdb_entities, H_chain_id)
-            score += ent_H.get_real_pdb_len(index_H)
-        if L_chain_id:
-            ent_L, index_L = find_ent_by_chain_id(pdb_entities, L_chain_id)
-            score += ent_L.get_real_pdb_len(index_L)
-        
-        # reward HL_inf_res_num
-        score += paired_HL[2]
-        
-        # reward paired ab-ag
-        if paired_ags[0][0]:
-            score += 100
-
-        # but penalize multi-ag chains
-        if len(paired_ags)>1:
-            score -= 100*len(paired_ags)
-        
-        # rewad ab_ag_inf_res_num, cdr_inf_res_num, and cdr_inf_res_ratio
-        for paired_ag in paired_ags:
-            score += (paired_ag[1] + paired_ag[2] + 10*paired_ag[3])
-        
-        if score > rep_score:
-            rep_ndx = index
-            rep_score = score
-        
-        if verbose:
-            print(f'score: {score}, rep_ndx: {rep_ndx}')
-        
-    return rep_ndx
-
-
 def is_val_within(val, lower, upper):
     if val >= lower and val <= upper:
         return True
@@ -884,7 +808,6 @@ def merge_identical_chain_entities(pdb_entities):
 
 def get_pdb_entities_from_fasta(pdbid, pdb_fasta_file):
     header_list, seq_dict = read_fasta(pdb_fasta_file)
-    label_to_auth, auth_to_label = dict(), dict()
 
     global asym_id_type
     if asym_id_type == 'auth':
@@ -905,11 +828,6 @@ def get_pdb_entities_from_fasta(pdbid, pdb_fasta_file):
             for id2 in chain_ids2:
                 if max_chain_id_len_2 < len(id2):
                     max_chain_id_len_2 = len(id2)
-            # create asym_id dict
-            for (id1, id2) in zip(chain_ids1, chain_ids2):
-                label_to_auth[id2] = id1
-                auth_to_label[id1] = id2
-
         if max_chain_id_len_1 == 1:
             asym_id_type = 'auth_asym_id'
         elif max_chain_id_len_2 == 1:
@@ -942,7 +860,7 @@ def get_pdb_entities_from_fasta(pdbid, pdb_fasta_file):
         ent.init_vgene_subgroups()
         ent.init_mean_radii()
 
-    return pdb_entities, label_to_auth, auth_to_label
+    return pdb_entities
 
 
 def remove_poor_residues_and_chains(structure):
@@ -980,92 +898,21 @@ def remove_poor_residues_and_chains(structure):
     return structure
 
 
-def extract_loop_blocks_from_cif(file_path):
-    blocks = []
-    in_loop = False
-    current_block = []
-    with open(file_path, 'r') as f:
-        for line in f:
-            line = line.strip()
-            if line.startswith('loop_'):
-                in_loop = True
-                current_block = [line]
-            elif line.startswith('#') and in_loop:
-                current_block.append(line)
-                blocks.append(current_block)
-                in_loop = False
-            elif in_loop:
-                current_block.append(line)
-    return blocks
-
-
-def extract_loop_blocks_from_cif_gz(file_path):
-    blocks = []
-    in_loop = False
-    current_block = []
-    with gzip.open(file_path, 'rt') as f:
-        for line in f:
-            line = line.strip()
-            if line.startswith('loop_'):
-                in_loop = True
-                current_block = [line]
-            elif line.startswith('#') and in_loop:
-                current_block.append(line)
-                blocks.append(current_block)
-                in_loop = False
-            elif in_loop:
-                current_block.append(line)
-    return blocks
-
-
-def find_block_by_name(blocks, name):
-    for block in blocks:
-        if block[1].startswith(name):
-            print(block)
-            return block
-    return []
-
-
-def get_struct_assembly(block_assembly, label_to_auth, auth_to_label):
-    assems = []
-    for line in block_assembly:
-        if line.startswith('loop_') or line.startswith('_') or line.startswith('#'):
-            continue
-        print(line)
-        assem = []
-        label_ids = line.split()[2].split(',')
-        for label_id in label_ids:
-            if label_id in label_to_auth:
-                if asym_id_type == 'auth_asym_id':
-                    assem.append(label_to_auth[label_id])
-                else:
-                    assem.append(label_id)
-        if assem:
-            assems.append(assem)
-    return assems
-
-
-def get_structure_from_cif(pdb_cif_path, pdbid, label_to_auth, auth_to_label):
+def get_structure_from_cif(pdb_cif_path, pdbid):
     auth_chains = True
     if asym_id_type != 'auth_asym_id':
         auth_chains = False
     parser = PDB.MMCIFParser(auth_chains=auth_chains)
     if os.path.exists(f'{pdb_cif_path}/{pdbid}.cif'):
-        blocks = extract_loop_blocks_from_cif(f'{pdb_cif_path}/{pdbid}.cif')
-        block_assembly = find_block_by_name(blocks, '_pdbx_struct_assembly_gen')
-        assems = get_struct_assembly(block_assembly, label_to_auth, auth_to_label)
         with open(f'{pdb_cif_path}/{pdbid}.cif', 'r') as f:
             structure = parser.get_structure(pdbid, f)
             structure = remove_poor_residues_and_chains(structure)
             return structure
     elif os.path.exists(f'{pdb_cif_path}/{pdbid[1:3]}/{pdbid}.cif.gz'):
-        blocks = extract_loop_blocks_from_cif_gz(f'{pdb_cif_path}/{pdbid[1:3]}/{pdbid}.cif.gz')
-        block_assembly = find_block_by_name(blocks, '_pdbx_struct_assembly_gen')
-        assems = get_struct_assembly(block_assembly, label_to_auth, auth_to_label)
         with gzip.open(f'{pdb_cif_path}/{pdbid[1:3]}/{pdbid}.cif.gz', 'rt') as f:
             structure = parser.get_structure(pdbid, f)
             structure = remove_poor_residues_and_chains(structure)
-            return structure, assems
+            return structure
 
 
 def parse_abrsa_out(abrsa_out):
@@ -1312,7 +1159,7 @@ def generate_ag_info(pdb_entities, chain_mapping, paired_ags):
             ab_ag_inf_res_num_str, cdr_inf_res_num_str, cdr_inf_res_ratio_str+'\n'])
 
 
-def generate_paired_ab_ag_ids(paired_ab_ags, chain_mapping, rep_ndx, model_index):
+def generate_paired_ab_ag_ids(paired_ab_ags, chain_mapping, model_index):
     chain_pair_line = str(model_index)+'\t'
     for i, paired_ab_ag in enumerate(paired_ab_ags):
         paired_HL, paired_ags = paired_ab_ag[0], paired_ab_ag[1]
@@ -1326,15 +1173,9 @@ def generate_paired_ab_ag_ids(paired_ab_ags, chain_mapping, rep_ndx, model_index
         if paired_ags[0][0]:
             ag_chain_id_str = ';'.join([chain_mapping[paired_ags[i][0]] for i in range(0, len(paired_ags))])
         if i==0:
-            if i==rep_ndx:
-                chain_pair_line += ','.join(['rep', H_chain_id_str, L_chain_id_str, ag_chain_id_str])
-            else:
-                chain_pair_line += ','.join(['nonrep', H_chain_id_str, L_chain_id_str, ag_chain_id_str])
+            chain_pair_line += ','.join([H_chain_id_str, L_chain_id_str, ag_chain_id_str])
         else:
-            if i==rep_ndx:
-                chain_pair_line += ','.join(['\t'+'rep', H_chain_id_str, L_chain_id_str, ag_chain_id_str])
-            else:
-                chain_pair_line +=  ','.join(['\t'+'nonrep', H_chain_id_str, L_chain_id_str, ag_chain_id_str])
+            chain_pair_line += ','.join(['\t'+H_chain_id_str, L_chain_id_str, ag_chain_id_str])
     chain_pair_line += '\n'
     return chain_pair_line
 
@@ -1361,7 +1202,7 @@ def clean_all_files(pdbid):
 def parse_ab_ag_interaction(pdbid, pdb_fasta_path, pdb_cif_path):
     print(f'parsing pdb entry {pdbid}')
     l2code = pdbid[1:3]
-    pdb_fasta_file = f'{pdb_fasta_path}/{l2code}/{pdbid}.fasta'
+    pdb_fasta_file = f'{pdb_fasta_path}/{l2code}/{pdbid[0:4]}.fasta'
     if not os.path.exists(pdb_fasta_file):
         print(f'done parsing (no fasta available for {pdbid})')
         exit(0)
@@ -1371,7 +1212,7 @@ def parse_ab_ag_interaction(pdbid, pdb_fasta_path, pdb_cif_path):
         exit(0)
 
     # create pdb_entities from the official pdbid.fasta file
-    pdb_entities, label_to_auth, auth_to_label = get_pdb_entities_from_fasta(pdbid, pdb_fasta_file)
+    pdb_entities = get_pdb_entities_from_fasta(pdbid, pdb_fasta_file)
     
     all_chain_abrsa_types = []
     total_chain_num = 0
@@ -1413,37 +1254,51 @@ def parse_ab_ag_interaction(pdbid, pdb_fasta_path, pdb_cif_path):
         exit(0)
     
     # create structure from the official pdbid.cif file
-    structure, assems = get_structure_from_cif(pdb_cif_path, pdbid, label_to_auth, auth_to_label)
+    structure = get_structure_from_cif(pdb_cif_path, pdbid)
     
     # create one-to-one mapping for chain ids with >=2 letters
     model = structure[0]
-    model_chain_ids = []
+    model_chain_ids, renamed_model_chain_ids = [], []
     for chain in model: 
         model_chain_ids.append(chain.get_id())
+        renamed_model_chain_ids.append(re.sub(r'-[0-9]+', '', chain.get_id()))
+    #exit(0)
 
+    # create chain mapping
     chain_mapping = dict()
+    for id_ in model_chain_ids:
+        if '-' in id_:
+            chain_mapping[id_] = id_[0]
+            single_letters.remove(id_[0])
     for id_ in model_chain_ids:
         # for single-letter chain, map it to itself
         if len(id_) == 1:
             chain_mapping[id_] = id_
             single_letters.remove(id_)
+
     for id_ in model_chain_ids:
+        if '-' in id_: continue
         # for chain with >=2 letters, map it to one of the remaining single letters in the single_letters list
         if len(id_) > 1:
             if len(single_letters) > 0:
                 chain_mapping[id_] = single_letters.pop(0)
     if verbose:
+        print('model_chain_ids:', model_chain_ids)
+        print('renamed_model_chain_ids:', renamed_model_chain_ids)
         print('chain mapping:', chain_mapping)
 
     # update pdb_entities and do chain name mapping
     new_entities = []
     for ent in pdb_entities:
-        if ent.get_chain_id(0) in model_chain_ids:
-            new_ids = ent.get_chain_ids()
-            for i, new_id in enumerate(new_ids):
-                new_ids[i] = chain_mapping[new_id]
-            ent.set_chain_ids(new_ids)
-            new_entities.append(ent)
+        new_ids = []
+        for chain_id in ent.get_chain_ids():
+            if chain_id in model_chain_ids:
+                new_ids.append(chain_mapping[chain_id])
+            elif chain_id in renamed_model_chain_ids:
+                chain_id_index = renamed_model_chain_ids.index(chain_id)
+                new_ids.append(chain_mapping[model_chain_ids[chain_id_index]])
+        ent.set_chain_ids(new_ids)
+        new_entities.append(ent)
     pdb_entities = new_entities
 
     # change chain id in model correspondingly
@@ -1453,7 +1308,7 @@ def parse_ab_ag_interaction(pdbid, pdb_fasta_path, pdb_cif_path):
             chain.id = chain_mapping[temp_id]
             chain_mapping[chain.id] = temp_id
 
-    saaint_lines, saaint_rep_lines, chain_pair_lines = [], [], []
+    saaint_lines, chain_pair_lines = [], []
     for model in structure:
         pdbid_model = f'{pdbid}_model_{model.id}'
         # run Pulchra and FASPR to rebuild the PDB entity
@@ -1594,9 +1449,9 @@ def parse_ab_ag_interaction(pdbid, pdb_fasta_path, pdb_cif_path):
         # pair Ab chains with Ag chains
         all_paired_ab_ags = []
         for paired_HLs in all_paired_HLs:
-            build_ab_ag_pairs(unidesign, pdbid_model, paired_HLs, pdb_entities, all_paired_ab_ags, chain_mapping, assems)
+            build_ab_ag_pairs(unidesign, pdbid_model, paired_HLs, pdb_entities, all_paired_ab_ags)
         if verbose:
-            print(f'all_paired_ab_ags: {all_paired_ab_ags}')
+            print('all_paired_ab_ags:', all_paired_ab_ags)
 
         # output paired Ab-Ag interactions or Ab info
         if all_paired_ab_ags:
@@ -1607,15 +1462,6 @@ def parse_ab_ag_interaction(pdbid, pdb_fasta_path, pdb_cif_path):
             l2code = pdbid[1:3]
             if not os.path.exists(l2code): os.mkdir(l2code)
             for paired_ab_ags in all_paired_ab_ags:
-                # find and record rep AAIs
-                rep_ndx = find_representative_ab_ag_pair_index(paired_ab_ags, pdb_entities)
-                rep_HL, rep_ags = paired_ab_ags[rep_ndx][0], paired_ab_ags[rep_ndx][1]
-                H_chain_id, L_chain_id, HL_inf_res_num, ab_type = rep_HL[0], rep_HL[1], rep_HL[2], rep_HL[4]
-                saaint_rep_line = generate_pdb_info(pdbid, mut_status, class_, deposit_date, release_date, method, resolution, r_free, r_work, pmid, doi, title, model.id, asym_id_type) \
-                        + generate_ab_info(pdb_entities, chain_mapping, H_chain_id, L_chain_id, HL_inf_res_num, ab_type) \
-                        + generate_ag_info(pdb_entities, chain_mapping, rep_ags)
-                saaint_rep_lines.append(saaint_rep_line)
-
                 # record all AAIs
                 for i, paired_ab_ag in enumerate(paired_ab_ags):
                     cur_HL, cur_ags = paired_ab_ag[0], paired_ab_ag[1]
@@ -1626,7 +1472,7 @@ def parse_ab_ag_interaction(pdbid, pdb_fasta_path, pdb_cif_path):
                     saaint_lines.append(saaint_line)
                 
                 # record AAI chain pairs
-                chain_pair_line = generate_paired_ab_ag_ids(paired_ab_ags, chain_mapping, rep_ndx, model.id)
+                chain_pair_line = generate_paired_ab_ag_ids(paired_ab_ags, chain_mapping, model.id)
                 chain_pair_lines.append(chain_pair_line)
             
             # clean files
@@ -1652,12 +1498,6 @@ def parse_ab_ag_interaction(pdbid, pdb_fasta_path, pdb_cif_path):
         for saaint_line in saaint_lines:
             f_all.write(f'{saaint_line}')
         f_all.close()
-        
-        f_rep = open(f'{l2code}/{pdbid}_aai_rep.tsv', 'w')
-        f_rep.write('\t'.join(saaint_header))
-        for saaint_line in saaint_rep_lines:
-            f_rep.write(f'{saaint_rep_line}')
-        f_rep.close()
         
         f_pairs = open(f'{l2code}/{pdbid}_paired_ab_ag_ids.tsv', 'w')
         for chain_pair_line in chain_pair_lines:
@@ -1697,8 +1537,8 @@ if __name__ == '__main__':
     
     # set PDB mmCIF and FASTA paths respectively
     abs_path     = os.path.dirname(os.path.realpath(__file__))
-    pdb_fasta_path = f'{abs_path}/../database/fasta_divided'
-    pdb_cif_path   = f'{abs_path}/../database/mmCIF_divided'
+    pdb_fasta_path = f'{abs_path}/../database/assemblies_fasta_divided'
+    pdb_cif_path   = f'{abs_path}/../database/assemblies_mmCIF_divided'
     
     # copy Abalign/lib because Abalign will always search from lib/ from the current path
     if not os.path.exists('lib'):

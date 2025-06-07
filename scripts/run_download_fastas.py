@@ -14,6 +14,10 @@ def get_undownloaded_fasta_pdbids(fasta_path, l2code, cif_pdbid_lst):
     return lst
 
 def download_pdb_fastas_in_bulk(undownloaded_pdbid_lst, fasta_path, l2code):
+    # create a directy in fasta_path if it does not exist
+    if not os.path.isdir(f'{fasta_path}/{l2code}'):
+        os.system(f'mkdir -p {fasta_path}/{l2code}')
+    
     # create a text file to record all entries with fastas to be downloaded
     file_name = f'fastas_for_download.txt'
     with open(file_name, 'w') as f:
@@ -55,6 +59,6 @@ if __name__ == '__main__':
 
     # add timestamp
     datetime_str = datetime.datetime.now().strftime('%Y-%m-%d|%H:%M:%S')
-    history = f'{db_path}/fasta_update_time'
+    history = f'{db_path}/assemblies_fasta_update_time'
     with open(history, 'w') as f:
         f.write(f'{datetime_str}\n')

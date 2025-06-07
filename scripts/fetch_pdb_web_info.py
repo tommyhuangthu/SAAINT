@@ -131,6 +131,8 @@ def get_rcsb_title(content):
 
 
 def fetch_pdb_web_info(fasta_path, pdbid):
+    # truncate pdb name: 1e28-assembly => 1e28
+    pdbid = pdbid[0:4]
     url = f'{url_tag}/{pdbid}'
     print(f'fetching pdb information for {pdbid} from {url}')
     

@@ -739,47 +739,6 @@ def compute_cdr_residues(ent, pdbid, abrsa_pdb):
     return
 
 
-def find_representative_ab_ag_pair_index(paired_ab_ags, pdb_entities):
-    rep_ndx = 0
-    rep_score = -10000
-    for index, paired_ab_ag in enumerate(paired_ab_ags):
-        score = 0
-        paired_HL, paired_ags = paired_ab_ag[0], paired_ab_ag[1]
-        H_chain_id, L_chain_id, HL_inf_res_num = paired_HL[0], paired_HL[1], paired_HL[2]
-
-        # reward H_pdb_seq_len and L_pdb_seq_len
-        if H_chain_id:
-            ent_H, index_H = find_ent_by_chain_id(pdb_entities, H_chain_id)
-            score += ent_H.get_real_pdb_len(index_H)
-        if L_chain_id:
-            ent_L, index_L = find_ent_by_chain_id(pdb_entities, L_chain_id)
-            score += ent_L.get_real_pdb_len(index_L)
-        
-        # reward HL_inf_res_num
-        score += paired_HL[2]
-        
-        # reward paired ab-ag
-        if paired_ags[0][0]:
-            score += 100
-
-        # but penalize multi-ag chains
-        if len(paired_ags)>1:
-            score -= 100*len(paired_ags)
-        
-        # rewad ab_ag_inf_res_num, cdr_inf_res_num, and cdr_inf_res_ratio
-        for paired_ag in paired_ags:
-            score += (paired_ag[1] + paired_ag[2] + 10*paired_ag[3])
-        
-        if score > rep_score:
-            rep_ndx = index
-            rep_score = score
-        
-        if verbose:
-            print(f'score: {score}, rep_ndx: {rep_ndx}')
-        
-    return rep_ndx
-
-
 def is_val_within(val, lower, upper):
     if val >= lower and val <= upper:
         return True
@@ -1200,7 +1159,7 @@ def generate_ag_info(pdb_entities, chain_mapping, paired_ags):
             ab_ag_inf_res_num_str, cdr_inf_res_num_str, cdr_inf_res_ratio_str+'\n'])
 
 
-def generate_paired_ab_ag_ids(paired_ab_ags, chain_mapping, rep_ndx, model_index):
+def generate_paired_ab_ag_ids(paired_ab_ags, chain_mapping, model_index):
     chain_pair_line = str(model_index)+'\t'
     for i, paired_ab_ag in enumerate(paired_ab_ags):
         paired_HL, paired_ags = paired_ab_ag[0], paired_ab_ag[1]
@@ -1214,15 +1173,9 @@ def generate_paired_ab_ag_ids(paired_ab_ags, chain_mapping, rep_ndx, model_index
         if paired_ags[0][0]:
             ag_chain_id_str = ';'.join([chain_mapping[paired_ags[i][0]] for i in range(0, len(paired_ags))])
         if i==0:
-            if i==rep_ndx:
-                chain_pair_line += ','.join(['rep', H_chain_id_str, L_chain_id_str, ag_chain_id_str])
-            else:
-                chain_pair_line += ','.join(['nonrep', H_chain_id_str, L_chain_id_str, ag_chain_id_str])
+            chain_pair_line += ','.join([H_chain_id_str, L_chain_id_str, ag_chain_id_str])
         else:
-            if i==rep_ndx:
-                chain_pair_line += ','.join(['\t'+'rep', H_chain_id_str, L_chain_id_str, ag_chain_id_str])
-            else:
-                chain_pair_line +=  ','.join(['\t'+'nonrep', H_chain_id_str, L_chain_id_str, ag_chain_id_str])
+            chain_pair_line += ','.join(['\t'+H_chain_id_str, L_chain_id_str, ag_chain_id_str])
     chain_pair_line += '\n'
     return chain_pair_line
 
@@ -1341,7 +1294,7 @@ def parse_ab_ag_interaction(pdbid, pdb_fasta_path, pdb_cif_path):
             chain.id = chain_mapping[temp_id]
             chain_mapping[chain.id] = temp_id
 
-    saaint_lines, saaint_rep_lines, chain_pair_lines = [], [], []
+    saaint_lines, chain_pair_lines = [], []
     for model in structure:
         pdbid_model = f'{pdbid}_model_{model.id}'
         # run Pulchra and FASPR to rebuild the PDB entity
@@ -1495,15 +1448,6 @@ def parse_ab_ag_interaction(pdbid, pdb_fasta_path, pdb_cif_path):
             l2code = pdbid[1:3]
             if not os.path.exists(l2code): os.mkdir(l2code)
             for paired_ab_ags in all_paired_ab_ags:
-                # find and record rep AAIs
-                rep_ndx = find_representative_ab_ag_pair_index(paired_ab_ags, pdb_entities)
-                rep_HL, rep_ags = paired_ab_ags[rep_ndx][0], paired_ab_ags[rep_ndx][1]
-                H_chain_id, L_chain_id, HL_inf_res_num, ab_type = rep_HL[0], rep_HL[1], rep_HL[2], rep_HL[4]
-                saaint_rep_line = generate_pdb_info(pdbid, mut_status, class_, deposit_date, release_date, method, resolution, r_free, r_work, pmid, doi, title, model.id, asym_id_type) \
-                        + generate_ab_info(pdb_entities, chain_mapping, H_chain_id, L_chain_id, HL_inf_res_num, ab_type) \
-                        + generate_ag_info(pdb_entities, chain_mapping, rep_ags)
-                saaint_rep_lines.append(saaint_rep_line)
-
                 # record all AAIs
                 for i, paired_ab_ag in enumerate(paired_ab_ags):
                     cur_HL, cur_ags = paired_ab_ag[0], paired_ab_ag[1]
@@ -1514,7 +1458,7 @@ def parse_ab_ag_interaction(pdbid, pdb_fasta_path, pdb_cif_path):
                     saaint_lines.append(saaint_line)
                 
                 # record AAI chain pairs
-                chain_pair_line = generate_paired_ab_ag_ids(paired_ab_ags, chain_mapping, rep_ndx, model.id)
+                chain_pair_line = generate_paired_ab_ag_ids(paired_ab_ags, chain_mapping, model.id)
                 chain_pair_lines.append(chain_pair_line)
             
             # clean files
@@ -1540,12 +1484,6 @@ def parse_ab_ag_interaction(pdbid, pdb_fasta_path, pdb_cif_path):
         for saaint_line in saaint_lines:
             f_all.write(f'{saaint_line}')
         f_all.close()
-        
-        f_rep = open(f'{l2code}/{pdbid}_aai_rep.tsv', 'w')
-        f_rep.write('\t'.join(saaint_header))
-        for saaint_line in saaint_rep_lines:
-            f_rep.write(f'{saaint_rep_line}')
-        f_rep.close()
         
         f_pairs = open(f'{l2code}/{pdbid}_paired_ab_ag_ids.tsv', 'w')
         for chain_pair_line in chain_pair_lines:

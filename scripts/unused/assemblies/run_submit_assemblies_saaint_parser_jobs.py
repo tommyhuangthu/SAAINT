@@ -100,9 +100,9 @@ def submit_sbatch_jobs(l2codes, list_of_entries, work_dir='./', n_cpu=300):
 #SBATCH --ntasks-per-node=1       ## how many processors do you need on each computer
 #SBATCH --mem=5G                 ## how much memory do you need on each computer
 #SBATCH --time=24:00:00           ## how long does this need to run (DD-HH:MM:ss)
-'''%(job, job, job, 'jiex99'))
+'''%(job, job, job, 'jiex0'))
                 for ent in list_of_entries[index]:
-                    f.write(f'{abs_path}/run_saaint_parser.py {ent}\n')
+                    f.write(f'{abs_path}/run_assemblies_saaint_parser.py {ent}\n')
 
             # submit sbatch script
             subprocess.Popen(['sbatch {}'.format(job)], shell=True)
@@ -129,7 +129,7 @@ if __name__ == '__main__':
         
 
         # delete previously calculated saaint results for obsolete entries
-        obsolete_list, update_dict = parse_rsync_mmcif_out(f'{abs_path}/../record/rsync_mmCIFs.out')
+        obsolete_list, update_dict = parse_rsync_mmcif_out(f'{abs_path}/../record/rsync_assemblies_mmCIFs.out')
         #saaint_path = f'{abs_path}/../database/saaint_divided'
         delete_saaint_results(saaint_path, obsolete_list, update_dict)
 

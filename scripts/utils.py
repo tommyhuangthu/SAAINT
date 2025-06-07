@@ -454,7 +454,6 @@ def extract_pdb_chains_to_file(in_pdb, chain_ids, out_pdb):
     return
 
 
-
 def get_l2codes(file_path):
     lst = []
     for l2full in glob.glob(f'{file_path}/[0-9a-z][0-9a-z]'):
@@ -462,15 +461,22 @@ def get_l2codes(file_path):
         lst.append(l2code)
     return lst
 
+
 def get_pdbids_by_l2code(file_path, l2code):
     lst = []
     if not os.path.exists(os.path.join(file_path, l2code)):
         return lst
-    for ent in glob.glob(f'{file_path}/{l2code}/[0-9a-z]{l2code}[0-9a-z].cif*'):
-        ent = ent.replace('.gz', '')
-        entcode = ent[-8:-4]
-        lst.append(entcode)
+    for ent in glob.glob(f'{file_path}/{l2code}/[0-9a-z]{l2code}[0-9a-z]*.cif*'):
+        slash_index = -1
+        for i in range(len(ent)-1, -1, -1):
+            if ent[i] == '/':
+                slash_index = i
+                break
+        entcode = ent[slash_index+1:slash_index+5]
+        if entcode not in lst:
+            lst.append(entcode)
     return lst
+
 
 def is_fasta_legal(fasta):
     with open(fasta, 'r') as f:
@@ -479,8 +485,6 @@ def is_fasta_legal(fasta):
                 return True
             else:
                 return False
-
-
 
 
 def pdb_to_fasta(pdb, fasta):
@@ -521,15 +525,27 @@ def parse_rsync_mmcif_out(rsync_out):
         for line in f.readlines():
             line = line.rstrip()
             if line.startswith('deleting'):
-                pdbid = line[-11:-7]
-                obsolete_list.append(pdbid)
+                slash_index = -1
+                for i in range(len(line)-1, -1, -1):
+                    if line[i] == '/':
+                        slash_index = i
+                        break
+                pdbid = line[slash_index+1:-7]
+                if pdbid not in obsolete_list:
+                    obsolete_list.append(pdbid)
             elif line[-7:] == '.cif.gz':
-                pdbid = line[-11:-7]
+                slash_index = -1
+                for i in range(len(line)-1, -1, -1):
+                    if line[i] == '/':
+                        slash_index = i
+                        break
+                pdbid = line[slash_index+1:-7]
                 l2code = pdbid[1:3]
                 if l2code not in update_dict:
                     update_dict[l2code] = [pdbid]
                 else:
-                    update_dict[l2code].append(pdbid)
+                    if pdbid not in update_dict[l2code]:
+                        update_dict[l2code].append(pdbid)
     return obsolete_list, update_dict
 
 

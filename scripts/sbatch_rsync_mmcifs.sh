@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH --job-name=rsync_mmCIF
-#SBATCH --error=/home/xiaoqiah/turbo/work/SAAINT/record/rsync_mmCIF.err
-#SBATCH --output=/home/xiaoqiah/turbo/work/SAAINT/record/rsync_mmCIF.out
+#SBATCH --job-name=rsync_mmCIFs
+#SBATCH --error=/home/xiaoqiah/turbo/work/SAAINT/record/rsync_mmCIFs.err
+#SBATCH --output=/home/xiaoqiah/turbo/work/SAAINT/record/rsync_mmCIFs.out
 #SBATCH --account=jiex99
 #SBATCH --partition=standard
 #SBATCH --nodes=1                 ## how many computers do you need
