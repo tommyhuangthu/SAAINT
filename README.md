@@ -188,32 +188,32 @@ This package provides:
 
 ## SAAINT-DB vs. SAbDab
 
-   Below we provide a head-to-head statistical comparison between SAAINT-DB (updated on 1-May-2025) and SAbDab (updated on 2-May-2025) 
+   Below we provide a head-to-head statistical comparison between SAAINT-DB (v.20250501; updated on 1-May-2025) and SAbDab (v.20250502; updated on 2-May-2025) 
 
-Item for comparison                            | SAAINT-DB    | SAbDab
---------------------------------------------:  | -----------: | -------:
-#{PDB entries}                                 |  9,757       |  9,521
-#{data entries}                                | 19,128       | 18,744
-#{PDB entries with ≥1 paired VH/VL}            |  7,822       |  7,622
-#{data entries with ≥1 paired VH/VL}           | 14,747       | 14,420
-#{PDB entries with Ag}                         |  7,489       |  7,788
-#{data entries with Ag}                        | 14,316       | 14,869
-#{PDB entries with Ab-Ag binding affinity data}|  1,331       |    736
-#{nonredundant Ab-Ag binding affinity data}    |  1,444       |    736
+Item                                           | SAAINT-DB |   SAbDab
+----------------------------------------------:| --------: | -------:
+#{PDB entries}                                 |     9,757 |    9,521
+#{data entries}                                |    19,128 |   18,744
+#{PDB entries with ≥1 paired VH/VL}            |     7,822 |    7,622
+#{data entries with ≥1 paired VH/VL}           |    14,747 |   14,420
+#{PDB entries with Ag}                         |     7,489 |    7,788
+#{data entries with Ag}                        |    14,316 |   14,869
+#{PDB entries with Ab-Ag binding affinity data}|     1,331 |      736
+#{nonredundant Ab-Ag binding affinity data}    |     1,444 |      736
 
 
 ## Statistics on latest SAAINT-DB
 
-Item for comparison                       | v.20250606
-----------------------------------------: | ---------:
-#{PDB entries}                            |      9,905
-#{data entries}                           |     19,411
-#{PDB entries with ≥1 paired VH/VL}       |      7,920
-#{data entries with ≥1 paired VH/VL}      |     14,949
-#{PDB entries with Ag}                    |      7,628
-#{data entries with Ag}                   |     14,574
-#{PDB entries with Ab-Ag binding affinity}|      1,331
-#{nonredundant Ab-Ag binding affinity}    |      1,444
+Item                                           | v.20250612
+----------------------------------------------:| ---------:
+#{PDB entries}                                 |      9,941
+#{data entries}                                |     19,470
+#{PDB entries with ≥1 paired VH/VL}            |      7,943
+#{data entries with ≥1 paired VH/VL}           |     14,989
+#{PDB entries with Ag}                         |      7,659
+#{data entries with Ag}                        |     14,618
+#{PDB entries with Ab-Ag binding affinity data}|      1,331
+#{nonredundant Ab-Ag binding affinity data}    |      1,444
 
 
 ## Reference
