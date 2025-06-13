@@ -218,7 +218,7 @@ Item                                           | v.20250612
 
 ## Reference
 
-Huang X, Zhou J, Chen S, Xia X, Chen YE, Xu J. SAAINT-DB: a comprehensive structural antibody database for antibody modeling and design. Acta Pharmacologica Sinica. doi: 10.1038/s41401-025-01608-5.
+Huang X, Zhou J, Chen S, Xia X, Chen YE, Xu J. SAAINT-DB: a comprehensive structural antibody database for antibody modeling and design. <i>Acta Pharmacologica Sinica </i> (2025). https://doi.org/10.1038/s41401-025-01608-5.
 
 ## Contact
 
