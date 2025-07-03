@@ -204,14 +204,14 @@ Item                                           | SAAINT-DB |   SAbDab
 
 ## Statistics on latest SAAINT-DB
 
-Item                                           | v.20250618
+Item                                           | v.20250703
 ----------------------------------------------:| ---------:
-#{PDB entries}                                 |      9,952
-#{data entries}                                |     19,489
-#{PDB entries with ≥1 paired VH/VL}            |      7,953
-#{data entries with ≥1 paired VH/VL}           |     15,006
-#{PDB entries with Ag}                         |      7,669
-#{data entries with Ag}                        |     14,634
+#{PDB entries}                                 |     10,035
+#{data entries}                                |     19,619
+#{PDB entries with ≥1 paired VH/VL}            |      8,020
+#{data entries with ≥1 paired VH/VL}           |     15,111
+#{PDB entries with Ag}                         |      7,747
+#{data entries with Ag}                        |     14,759
 #{PDB entries with Ab-Ag binding affinity data}|      1,331
 #{nonredundant Ab-Ag binding affinity data}    |      1,444
 
