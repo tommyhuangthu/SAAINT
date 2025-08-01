@@ -202,16 +202,16 @@ Item                                           | SAAINT-DB |   SAbDab
 #{nonredundant Ab-Ag binding affinity data}    |     1,444 |      736
 
 
-## Statistics on latest SAAINT-DB
+## Statistics on latest SAAINT-DB version
 
-Item                                           | v.20250716
+Item                                           | v.20250730
 ----------------------------------------------:| ---------:
-#{PDB entries}                                 |     10,068
-#{data entries}                                |     19,687
-#{PDB entries with ≥1 paired VH/VL}            |      8,037
-#{data entries with ≥1 paired VH/VL}           |     15,146
-#{PDB entries with Ag}                         |      7,778
-#{data entries with Ag}                        |     15,146
+#{PDB entries}                                 |     10,127
+#{data entries}                                |     19,802
+#{PDB entries with ≥1 paired VH/VL}            |      8,084
+#{data entries with ≥1 paired VH/VL}           |     15,239
+#{PDB entries with Ag}                         |      7,832
+#{data entries with Ag}                        |     14,926
 #{PDB entries with Ab-Ag binding affinity data}|      1,331
 #{nonredundant Ab-Ag binding affinity data}    |      1,444
 
