@@ -202,7 +202,7 @@ Item                                           | SAAINT-DB |   SAbDab
 #{nonredundant Ab-Ag binding affinity data}    |     1,444 |      736
 
 
-## Statistics on latest SAAINT-DB version
+## Statistics on the latest version of SAAINT-DB
 
 Item                                           | v.20250730
 ----------------------------------------------:| ---------:
