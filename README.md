@@ -121,6 +121,9 @@ This package provides:
    python3 scripts/run_saaintdb_analyzer.py saaintdb/saaintdb_2025012908_all.xlsx -j <jobname>
    ```
    Here, ```<jobname>``` can take the following options:\
+   ```num_entries```: Count the number of PDB and data entries. \
+   ```num_entries_with_paired_vhvl```: Count the PDB and data entries with paired VH/VL chains.\
+   ```num_entries_with_ag```: Count the PDB and data entries with antigen.\
    ```date```: Analyze the deposition and release dates of PDB entries.\
    ```classification```: Examine the classification of PDB entries.\
    ```method```: Analyze the experimental methods used to determine PDB structures.\
@@ -128,7 +131,6 @@ This package provides:
    ```publication```: Analyze PDB-associated publication details, including PMID and DOI.\
    ```asym_id```: Analyze the types of asym_id used to parse PDB entries.\
    ```plot_pdb_num```: Plot the number of PDB entries over released years.\
-   ```num_entries```: Count the number of PDB and data entries. \
    ```ab_spe```: Analyze the top species for antibody heavy and light chains.\
    ```ab_type```: Analyze antibody types annotated by the SAAINT parser.\
    ```HL_inf_res_num```: Analyze and plot the number of heavy chain-light chain interface residues per antibody types.\
@@ -139,9 +141,8 @@ This package provides:
    ```ab_ag_inf_res_num```: Plot a histogram of antibody-antigen interface residue counts.\
    ```cdr_inf_res_num```: Plot a histogram of interface CDR residue counts.\
    ```cdr_inf_res_ratio```: Plot a histogram of the ratio of interface CDR residues to total interface antibody residues.\
-   ```ag_chain_num```: Analyze the number of antigens with varying chain counts.\
-   ```num_entries_with_paired_vhvl```: Count the PDB and data entries with paired VH/VL chains.\
-   ```num_entries_with_ag```: Count the PDB and data entries with antigen.
+   ```ag_chain_num```: Analyze the number of antigens with varying chain counts.
+
 
 1. Analyze antibody-antigen binding affinity data
 
@@ -204,14 +205,16 @@ Item                                           | SAAINT-DB |   SAbDab
 
 ## Statistics on the latest version of SAAINT-DB
 
-Item                                           | v.20250814
+<strong>SAAINT-DB is currently updated on Thursday every two weeks, with most recent statistics provided as follows:</strong>
+
+Item                                           | v.20250828
 ----------------------------------------------:| ---------:
-#{PDB entries}                                 |     10,171
-#{data entries}                                |     19,917
-#{PDB entries with ≥1 paired VH/VL}            |      8,123
-#{data entries with ≥1 paired VH/VL}           |     15,335
-#{PDB entries with Ag}                         |      7,876
-#{data entries with Ag}                        |     15,040
+#{PDB entries}                                 |     10,236
+#{data entries}                                |     20,050
+#{PDB entries with ≥1 paired VH/VL}            |      8,183
+#{data entries with ≥1 paired VH/VL}           |     15,456
+#{PDB entries with Ag}                         |      7,926
+#{data entries with Ag}                        |     15,145
 #{PDB entries with Ab-Ag binding affinity data}|      1,331
 #{nonredundant Ab-Ag binding affinity data}    |      1,444
 
