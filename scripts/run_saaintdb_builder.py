@@ -25,7 +25,7 @@ if __name__ == '__main__':
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         
         df = pandas.read_csv(tmp, sep='\t', keep_default_na=False)
-        df = df.sort_values(by=['PDB_ID', 'Ag_chain_ID(s)', 'H_chain_ID', 'L_chain_ID'], ascending=[True, True, True, True])
+        df = df.sort_values(by=['Deposit_date', 'Release_date', 'PDB_ID', 'Ag_chain_ID(s)', 'H_chain_ID', 'L_chain_ID'], ascending=[True, True, True, True, True, True])
         print(df)
         
         df.to_excel(f'{xlsx}', sheet_name=f'{tag}', na_rep='', index=False)

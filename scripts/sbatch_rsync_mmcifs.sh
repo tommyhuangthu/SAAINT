@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=rsync_mmCIFs
+#SBATCH --job-name=/home/xiaoqiah/turbo/work/SAAINT/record/rsync_mmCIFs
 #SBATCH --error=/home/xiaoqiah/turbo/work/SAAINT/record/rsync_mmCIFs.err
 #SBATCH --output=/home/xiaoqiah/turbo/work/SAAINT/record/rsync_mmCIFs.out
 #SBATCH --account=jiex99

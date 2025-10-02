@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import glob, os, datetime
+import glob, os, datetime, time
 from utils import is_fasta_legal, parse_rsync_mmcif_out
 
 def update_pdb_fastas(fasta_path, update_dict):
@@ -22,6 +22,7 @@ def update_pdb_fastas(fasta_path, update_dict):
             else:
                 os.remove(f'{entcode}')
         os.remove(file_name)
+        time.sleep(3)
     return
 
 
