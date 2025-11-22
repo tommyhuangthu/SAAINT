@@ -4,10 +4,10 @@ from Bio import PDB, SeqIO, BiopythonWarning
 import numpy as np
 
 # global variables
-homedir      = '/home/xiaoqiah/turbo/work'
-unidesign    = f'{homedir}/UniDesign/UniDesign'
-faspr        = f'{homedir}/FASPR/FASPR'
-pulchra      = f'{homedir}/Programs/pulchra/pulchra'
+software_dir = '/home/xiaoqiah/turbo/work'
+unidesign    = f'{software_dir}/UniDesign/UniDesign'
+faspr        = f'{software_dir}/FASPR/FASPR'
+pulchra      = f'{software_dir}/Programs/pulchra/pulchra'
 abs_path     = os.path.dirname(os.path.realpath(__file__))
 abrsa        = f'{abs_path}/../ext_bin/AbRSA/AbRSA'
 abrsa_pdb    = f'{abs_path}/../ext_bin/AbRSA_PDB'

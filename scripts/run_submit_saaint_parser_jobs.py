@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import os, sys, subprocess
+import os, sys, subprocess, glob
 from utils import read_list, get_l2codes, get_pdbids_by_l2code, abalign_lib, parse_rsync_mmcif_out
 
 # get the absolute path of current python script file
@@ -16,6 +16,9 @@ def delete_saaint_results(saaint_path, obsolete_list, update_dict):
         if os.path.exists(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_paired_ab_ag_ids.tsv'):
             print(f'deleting {saaint_path}/{pdbid[1:3]}/{pdbid}_paired_ab_ag_ids.tsv')
             os.remove(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_paired_ab_ag_ids.tsv')
+        for file in glob.glob(f'{saaint_path}/{pdbid}_model_*.pdb'):
+            print(f'deleting {file}')
+            os.remove(f'{file}')
     for l2code in update_dict:
         for pdbid in update_dict[l2code]:
             if os.path.exists(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_aai_all.tsv'):
@@ -27,6 +30,9 @@ def delete_saaint_results(saaint_path, obsolete_list, update_dict):
             if os.path.exists(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_paired_ab_ag_ids.tsv'):
                 print(f'deleting {saaint_path}/{pdbid[1:3]}/{pdbid}_paired_ab_ag_ids.tsv')
                 os.remove(f'{saaint_path}/{pdbid[1:3]}/{pdbid}_paired_ab_ag_ids.tsv')
+            for file in glob.glob(f'{saaint_path}/{pdbid}_model_*.pdb'):
+                print(f'deleting {file}')
+                os.remove(f'{file}')
     return
 
 

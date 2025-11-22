@@ -207,14 +207,14 @@ Item                                           | SAAINT-DB |   SAbDab
 
 <strong>SAAINT-DB is currently updated on Thursday every two weeks, with most recent statistics provided as follows:</strong>
 
-Item                                           | v.20251024
+Item                                           | v.20251121
 ----------------------------------------------:| ---------:
-#{PDB entries}                                 |     10,398
-#{data entries}                                |     20,385
-#{PDB entries with ≥1 paired VH/VL}            |      8,303
-#{data entries with ≥1 paired VH/VL}           |     15,673
-#{PDB entries with Ag}                         |      8,066
-#{data entries with Ag}                        |     15,430
+#{PDB entries}                                 |     10,522
+#{data entries}                                |     20,621
+#{PDB entries with ≥1 paired VH/VL}            |      8,395
+#{data entries with ≥1 paired VH/VL}           |     15,816
+#{PDB entries with Ag}                         |      8,174
+#{data entries with Ag}                        |     15,612
 #{PDB entries with Ab-Ag binding affinity data}|      1,331
 #{nonredundant Ab-Ag binding affinity data}    |      1,444
 
