@@ -205,7 +205,7 @@ Item                                           | SAAINT-DB |   SAbDab
 
 ## Statistics on the latest version of SAAINT-DB
 
-<strong>SAAINT-DB is currently updated on Thursday every two weeks, with most recent statistics provided as follows:</strong>
+<strong>SAAINT-DB is currently updated on Thursday monthly, with most recent statistics provided as follows:</strong>
 
 Item                                           | v.20251121
 ----------------------------------------------:| ---------:
